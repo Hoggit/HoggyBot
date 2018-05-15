@@ -18,8 +18,7 @@ class Commendations:
         self.c_commendations = dataIO.load_json(self.file_path)
 
 
-    @commands.group(pass_context=True)
-    async def commend(self, ctx, user: discord.Member, text):
+    async def commend(self, user: discord.Member, text):
         self.bot.say("Got commendation for user {} with text {}".format(user.name, text))
 
 
