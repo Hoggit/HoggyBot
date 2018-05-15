@@ -38,9 +38,11 @@ class Commendations:
         if author.id == user.id:
             raise SameUserError()
         comm = {}
-        comm['user'] = user.id
+        comm['user'] = user.name
+        comm['user.id'] = user.id
         comm['text'] = text
-        comm['author'] = author.id
+        comm['author.id'] = author.id
+        comm['author'] = author.name
         return comm
 
     @commands.group(name="commend", pass_context=True)
@@ -67,7 +69,12 @@ class Commendations:
         """
         Provides the number of commendations the given user has received
         """
+        server_id = ctx.message.server.id
+        if server.id not in self.c_commendations:
+            await self.bot.say("No commendations found for {}".format(user.name))
         server_comms = self.c_commendations[ctx.message.server.id]
+        if user.id not in server_comms:
+            await self.bot.say("No commendations found for {}".format(user.name))
         user_comms = server_comms[user.id]
         await self.bot.say("{} has {} commendations".format(user.name, len(user_comms)))
 
