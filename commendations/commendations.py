@@ -46,7 +46,7 @@ class Commendations:
         return comm
 
     @commands.group(name="commend", pass_context=True)
-    async def commend(self, ctx, user: discord.Member = None, text = ""):
+    async def commend(self, ctx, user: discord.Member = None, *, text = ""):
         """
         Adds a commendation to the given member, with the provided text as the reason behind it
         """
