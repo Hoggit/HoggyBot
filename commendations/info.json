@@ -1,0 +1,10 @@
+{
+  "AUTHOR": "Hoggit",
+  "INSTALL_MSG": "Hoggit Commendations is installed",
+  "NAME": "Commendations",
+  "SHORT": "Tracks commendations for your server members, given by other server members",
+  "DESCRIPTION": "Users in your server can commend another user in your server. This cog will track each commendation and allow you to display a count of commendations for a particular user",
+  "TAGS": ["utility"],
+  "REQUIREMENTS": [],
+  "HIDDEN": false
+}
