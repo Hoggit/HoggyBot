@@ -70,9 +70,9 @@ class Commendations:
         Provides the number of commendations the given user has received
         """
         server_id = ctx.message.server.id
-        if server.id not in self.c_commendations:
+        if server_id not in self.c_commendations:
             await self.bot.say("No commendations found for {}".format(user.name))
-        server_comms = self.c_commendations[ctx.message.server.id]
+        server_comms = self.c_commendations[server_id]
         if user.id not in server_comms:
             await self.bot.say("No commendations found for {}".format(user.name))
         user_comms = server_comms[user.id]
