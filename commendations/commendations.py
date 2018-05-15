@@ -20,7 +20,7 @@ class Commendations:
 
     @commands.group(pass_context=True)
     async def commend(self, ctx, user: discord.Member, text):
-        self.bot.say("Got ctx [{}], user [{}], text [{}]".format(ctx, user, text))
+        self.bot.say("Got commendation for user {} with text {}".format(user.name, text))
 
 
 
