@@ -6,6 +6,9 @@ from .utils.chat_formatting import pagify, box
 import os
 import re
 
+class SameUserError(Exception):
+    pass
+
 class Commendations:
     """Commendations
 
@@ -41,7 +44,10 @@ class Commendations:
         return comm
 
     @commands.group(name="commend", pass_context=True)
-    async def commend(self, ctx, user: discord.Member, text):
+    async def commend(self, ctx, user: discord.Member = None, text = ""):
+        """
+        Adds a commendation to the given member, with the provided text as the reason behind it
+        """
         author = ctx.message.author
         try:
             commendation = self.commendation(author, user, text)
@@ -51,19 +57,19 @@ class Commendations:
         except SameUserError:
             await self.bot.say("You can't give yourself a commendation you nitwit")
 
+    @commands.group(name = "commendations", pass_context=True)
+    async def commendations(self, ctx):
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
 
-class SameUserError(Exception):
-    pass
-
-class Commendation:
-
-    def __init__(self, author, user, text):
-        if author.id == user.id:
-            raise SameUserError()
-
-        self.author = author.id
-        self.user = user.id
-        self.text = text
+    @commendations.command(name = "list", pass_context=True)
+    async def list(self, ctx, user: discord.Member):
+        """
+        Provides the number of commendations the given user has received
+        """
+        server_comms = self.c_commendations[ctx.message.server.id]
+        user_comms = server_comms[user.id]
+        await self.bot.say("{} has {} commendations".format(user.name, len(user_comms)))
 
 def check_folders():
     if not os.path.exists("data/commendations"):
