@@ -32,7 +32,7 @@ def check_folders():
 
 
 def check_files():
-    f = "data/customcom/commendations.json"
+    f = "data/commendations/commendations.json"
     if not dataIO.is_valid_json(f):
         print("Creating empty commendations.json...")
         dataIO.save_json(f, {})
