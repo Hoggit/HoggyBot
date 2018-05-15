@@ -22,7 +22,7 @@ class Commendations:
 
     def store(self, ctx, commendation):
         server = ctx.message.server
-        user = commendation['user']
+        user = commendation['user.id']
         if server.id not in self.c_commendations:
             self.c_commendations[server.id] = {}
         server_commendations = self.c_commendations[server.id]
