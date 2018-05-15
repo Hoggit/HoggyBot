@@ -72,9 +72,11 @@ class Commendations:
         server_id = ctx.message.server.id
         if server_id not in self.c_commendations:
             await self.bot.say("No commendations found for {}".format(user.name))
+            return
         server_comms = self.c_commendations[server_id]
         if user.id not in server_comms:
             await self.bot.say("No commendations found for {}".format(user.name))
+            return
         user_comms = server_comms[user.id]
         await self.bot.say("{} has {} commendations".format(user.name, len(user_comms)))
 
