@@ -54,10 +54,18 @@ class HoggitWiki:
         return parsed_results
 
 
+    def format_results(self, results):
+        formatted_results = []
+        for result in results:
+            formatted = "{}: <{}>".format(result["title"], result["link"])
+            formatted_results.append(formatted)
+
 
     async def bot_say_multiple_results(self, response):
         results = await self.parse_results(response)
-        message = "This\nis\na\nnewline\ntest"
+        formatted_results = self.format_results(results)
+        message = "I couldn't find an exact match. But here's some suggestions:\n" +
+                    "\n".join(str(x) for x in formatted_results)
         await self.bot.say(message)
 
     @commands.command()
