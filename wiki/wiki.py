@@ -61,10 +61,13 @@ class HoggitWiki:
         return formatted_results
 
 
-    async def bot_say_multiple_results(self, response):
+    async def bot_say_search_results(self, response):
         results = await self.parse_results(response)
         formatted_results = self.format_results(results)
-        message = "I couldn't find an exact match. But here's some suggestions:\n" + "\n".join(str(x) for x in formatted_results)
+        if (len(formatted_results) == 0):
+            message = "Could not find any results :("
+        else:
+            message = "I couldn't find an exact match. But here's some suggestions:\n" + "\n".join(str(x) for x in formatted_results)
         await self.bot.say(message)
 
     @commands.command()
@@ -73,7 +76,7 @@ class HoggitWiki:
         if (self.was_redirect(resp)):
             await self.bot_say_single_result(resp.url)
         else:
-            await self.bot_say_multiple_results(resp)
+            await self.bot_say_search_results(resp)
 
 def setup(bot):
     bot.add_cog(HoggitWiki(bot))
