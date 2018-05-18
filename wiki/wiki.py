@@ -37,7 +37,7 @@ class HoggitWiki:
         print("Sending message: {}".format(message))
         await self.bot.say(message)
 
-    def parse_results(self, response):
+    async def parse_results(self, response):
         soup = BeautifulSoup(await response.text())
         search_results = soup.find_all("div", "mw-search-result-heading")
         results_parsed = 0
@@ -57,7 +57,7 @@ class HoggitWiki:
 
 
     async def bot_say_multiple_results(self, response):
-        results = self.parse_results(response)
+        results = await self.parse_results(response)
         message = "This\nis\na\nnewline\ntest"
         await self.bot.say(message)
 
