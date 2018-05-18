@@ -1,0 +1,10 @@
+{
+    "AUTHOR": "Hoggit",
+    "INSTALL_MSG": "Hoggit Wiki Cog installed",
+    "NAME": "Hoggit Wiki",
+    "SHORT": "Searches the hoggit wiki for your given terms.",
+    "DESCRIPTION": "Responds either with a direct page, or a list of links you might be interested in.",
+    "TAGS": ["utility"],
+    "REQUIREMENTS": [],
+    "HIDDEN": false
+}
