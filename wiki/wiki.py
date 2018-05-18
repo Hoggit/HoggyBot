@@ -59,6 +59,7 @@ class HoggitWiki:
         for result in results:
             formatted = "{}: <{}>".format(result["title"], result["link"])
             formatted_results.append(formatted)
+        return formatted_results
 
 
     async def bot_say_multiple_results(self, response):
