@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
+from .utils.chat_formatting import pagify
 import aiohttp
+from bs4 import BeautifulSoup
 
 class HoggitWiki:
     """
@@ -11,8 +13,11 @@ class HoggitWiki:
         self.bot = bot
         self.session = aiohttp.ClientSession()
 
+    def base_url(self):
+        return "http://wiki-beta.hoggitworld.com/"
+
     def url(self, search):
-        return "http://wiki-beta.hoggitworld.com/index.php?title=Special%3ASearch&search={}&go=Go".format(search)
+        return base_url + "index.php?title=Special%3ASearch&search={}&go=Go".format(search)
 
     def fetch(self, session, url):
         return session.get(url)
@@ -32,10 +37,28 @@ class HoggitWiki:
         print("Sending message: {}".format(message))
         await self.bot.say(message)
 
+    def parse_results(self, response):
+        soup = BeautifulSoup(await response.text())
+        search_results = soup.find_all("div", "mw-search-result-heading")
+        results_parsed = 0
+        max_results = 3
+        parsed_results = []
+        for ele in search_results:
+            sr = ele.find("a")
+            result = {}
+            result["title"] = sr["title"]
+            result["link"] = base_url + sr["href"]
+            parsed_results.append(result)
+            results_parsed++
+            if (results_parsed >= max_results) break
+
+        return parsed_results
+
+
 
     async def bot_say_multiple_results(self, response):
-        message = "Got multiple results. Parsing coming soon"
-        print("Multiple results")
+        results = self.parse_results(response)
+        message = "This\nis\na\nnewline\ntest"
         await self.bot.say(message)
 
     @commands.command()
