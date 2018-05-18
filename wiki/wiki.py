@@ -15,8 +15,7 @@ class HoggitWiki:
         return "http://wiki-beta.hoggitworld.com/index.php?search={}&title=Special%3ASearch&profile=default&fulltext=1".format(search)
 
     def fetch(self, session, url):
-        async with session.get(url) as response:
-            return response
+        return await session.get(url)
 
     def was_redirect(self, response):
         return len(resp.history) > 0
