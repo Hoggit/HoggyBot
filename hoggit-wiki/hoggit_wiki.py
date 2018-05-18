@@ -37,3 +37,6 @@ class HoggitWiki:
             bot_say_single_result(resp.history[0].url)
         else:
             bot_say_multiple_results(resp)
+
+def setup(bot):
+    bot.add_cog(HoggitWiki(bot))
