@@ -12,12 +12,10 @@ class HoggitWiki:
     def __init__(self, bot):
         self.bot = bot
         self.session = aiohttp.ClientSession()
-
-    def base_url(self):
-        return "http://wiki-beta.hoggitworld.com/"
+        self.base_url = "http://wiki-beta.hoggitworld.com/"
 
     def url(self, search):
-        return base_url + "index.php?title=Special%3ASearch&search={}&go=Go".format(search)
+        return self.base_url + "index.php?title=Special%3ASearch&search={}&go=Go".format(search)
 
     def fetch(self, session, url):
         return session.get(url)
@@ -47,7 +45,7 @@ class HoggitWiki:
             sr = ele.find("a")
             result = {}
             result["title"] = sr["title"]
-            result["link"] = base_url + sr["href"]
+            result["link"] = self.base_url + sr["href"]
             parsed_results.append(result)
             results_parsed+=1
             if (results_parsed >= max_results):
