@@ -49,7 +49,7 @@ class HoggitWiki:
             result["title"] = sr["title"]
             result["link"] = base_url + sr["href"]
             parsed_results.append(result)
-            results_parsed++
+            results_parsed+=1
             if (results_parsed >= max_results) break
 
         return parsed_results
