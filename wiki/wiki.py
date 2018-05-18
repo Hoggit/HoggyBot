@@ -12,10 +12,10 @@ class HoggitWiki:
     def __init__(self, bot):
         self.bot = bot
         self.session = aiohttp.ClientSession()
-        self.base_url = "http://wiki-beta.hoggitworld.com/"
+        self.base_url = "http://wiki-beta.hoggitworld.com"
 
     def url(self, search):
-        return self.base_url + "index.php?title=Special%3ASearch&search={}&go=Go".format(search)
+        return self.base_url + "/index.php?title=Special%3ASearch&search={}&go=Go".format(search)
 
     def fetch(self, session, url):
         return session.get(url)
