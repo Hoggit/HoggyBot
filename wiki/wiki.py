@@ -31,8 +31,7 @@ class HoggitWiki:
         return len(resp.history) > 0
 
     async def bot_say_single_result(self, result_url):
-        message = result_url
-        print("Sending message: {}".format(message))
+        message = "<{}>".format(result_url)
         await self.bot.say(message)
 
     async def parse_results(self, response):
