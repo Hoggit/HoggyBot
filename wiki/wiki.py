@@ -64,8 +64,7 @@ class HoggitWiki:
     async def bot_say_multiple_results(self, response):
         results = await self.parse_results(response)
         formatted_results = self.format_results(results)
-        message = "I couldn't find an exact match. But here's some suggestions:\n" +
-                    "\n".join(str(x) for x in formatted_results)
+        message = "I couldn't find an exact match. But here's some suggestions:\n" + "\n".join(str(x) for x in formatted_results)
         await self.bot.say(message)
 
     @commands.command()
