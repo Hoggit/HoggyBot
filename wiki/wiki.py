@@ -16,7 +16,7 @@ class HoggitWiki:
         self.session = aiohttp.ClientSession()
 
         self.synonyms = fileIO('data/wiki/synonyms.json', 'load')
-        self.base_url = "http://wiki-beta.hoggitworld.com"
+        self.base_url = "http://wiki.hoggitworld.com"
 
     def url(self, search):
         return self.base_url + "/index.php?title=Special%3ASearch&search={}&go=Go".format(search)
@@ -84,7 +84,7 @@ class HoggitWiki:
             await self.bot.say("Synonym {0} -> {1} added".format(syn, target))
 
         if command == "remove":
-            syn = query.split('>')[0].strip()
+            syn = query.split('>')[0].strip().lower()
             if syn not in self.synonyms.keys():
                 await self.bot.say("Synonym {0} not found.".format(syn))
             else:
