@@ -17,7 +17,7 @@ class HoggitWiki:
         self.session = aiohttp.ClientSession()
 
         self.synonyms = fileIO('data/wiki/synonyms.json', 'load')
-        self.base_url = "http://wiki.hoggitworld.com"
+        self.base_url = "https://wiki.hoggitworld.com"
 
     def url(self, search):
         return self.base_url + "/index.php?title=Special%3ASearch&search={}&go=Go".format(search)
