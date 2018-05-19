@@ -69,10 +69,11 @@ class HoggitWiki:
             message = "Could not find any results :("
         else:
             message = "I couldn't find an exact match. But here's some suggestions:\n{0}\n".format(
-                "\n".join(str(x) for x in formatted_results))
-        await self.bot.say(message)
+                    "\n".join(str(x) for x in formatted_results))
+            await self.bot.say(message)
 
     @commands.command()
+    @checks.mod_or_permissions(manage_server=True)
     async def wiki_syn(self, command, *args):
         query = ' '.join(args)
         if command == "add":
