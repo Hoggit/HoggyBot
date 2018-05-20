@@ -43,27 +43,27 @@ class HoggitWiki:
         results_parsed = 0
         max_results = 3
         parsed_results = []
+        links_used = []
         for ele in search_results:
             sr = ele.find("a")
             result = dict()
             result["title"] = sr["title"]
             result["link"] = self.base_url + sr["href"]
-            parsed_results.append(result)
-            results_parsed += 1
-            if results_parsed >= max_results:
-                break
+            if result["link"] not in links_used:
+                parsed_results.append(result)
+                links_used.append(result["link"])
+                results_parsed += 1
+                if results_parsed >= max_results:
+                    break
 
         return parsed_results
 
     @staticmethod
     def format_results(results):
         formatted_results = []
-        links_used = []
         for result in results:
-            if result["link"] not in links_used:
-                formatted = "{}: <{}>".format(result["title"], result["link"])
-                formatted_results.append(formatted)
-                links_used.append(result["link"])
+            formatted = "{}: <{}>".format(result["title"], result["link"])
+            formatted_results.append(formatted)
         return formatted_results
 
     async def bot_say_search_results(self, response):
