@@ -99,7 +99,7 @@ class HoggitWiki:
     async def wiki(self, *search_text):
         query = ' '.join(search_text)
         if query.lower() in self.synonyms.keys():
-            query = self.synonyms[query]
+            query = self.synonyms[query.lower()]
 
         resp = await self.session.get(self.url(query))
         if HoggitWiki.was_redirect(resp):
