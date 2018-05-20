@@ -78,7 +78,7 @@ class HoggitWiki:
     async def wiki_syn(self, command, *args):
         query = ' '.join(args)
         if command == "add":
-            syn = query.split('>')[0].strip()
+            syn = query.split('>')[0].strip().lower()
             target = query.split('>')[1].strip()
             self.synonyms[syn] = target
 
@@ -98,7 +98,7 @@ class HoggitWiki:
     @commands.command()
     async def wiki(self, *search_text):
         query = ' '.join(search_text)
-        if query in self.synonyms.keys():
+        if query.lower() in self.synonyms.keys():
             query = self.synonyms[query]
 
         resp = await self.session.get(self.url(query))
