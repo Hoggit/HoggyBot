@@ -58,9 +58,12 @@ class HoggitWiki:
     @staticmethod
     def format_results(results):
         formatted_results = []
+        links_used = []
         for result in results:
-            formatted = "{}: <{}>".format(result["title"], result["link"])
-            formatted_results.append(formatted)
+            if result["link"] not in links_used:
+                formatted = "{}: <{}>".format(result["title"], result["link"])
+                formatted_results.append(formatted)
+                links_used.append(result["link"])
         return formatted_results
 
     async def bot_say_search_results(self, response):
