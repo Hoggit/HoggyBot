@@ -31,8 +31,8 @@ class DCSServerStatus:
         status = json.load(resp.text())
         return status
 
-    @commands.group(name="dedicated", pass_context=True)
-    async def dedicated(self, ctx):
+    @commands.group(name="server", pass_context=True)
+    async def server(self, ctx):
         if ctx.invoked_subcommand is None:
             if (self.key_data == {}):
                 await self.bot.say("Configure the key first bud")
@@ -40,7 +40,7 @@ class DCSServerStatus:
                 status = self.get_status()
                 await self.bot.say("Would look up status if I worked... Thanks")
 
-    @commands.group(name="dedicated")
+    @server.command(name="key")
     @checks.mod_or_permissions(manage_server=True)
     async def key(self, *, text = ""):
         key = {}
