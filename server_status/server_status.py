@@ -35,7 +35,7 @@ class DCSServerStatus:
     @checks.mod_or_permissions(manage_server=True)
     async def key(self, *, text = ""):
         key = {}
-        key.key = text
+        key["key"] = text
         self.store_key(key)
         await self.bot.say("Updated Key to {}".format(key.key))
 
