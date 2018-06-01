@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from .utils.chat_formatting import pagify
 from .utils import checks
-from .utils.dataIO import fileIO
+from .utils.dataIO import dataIO
 import json
 import aiohttp
 from bs4 import BeautifulSoup
@@ -49,9 +49,9 @@ class DCSServerStatus:
 def check_file():
     f = "data/server_status/server.json"
     if not dataIO.is_valid_json(f):
-        print("Creating the server file to hold your api key..."
+        print("Creating the server file to hold your api key...")
         dataIO.save_json(f, {})
 
 def setup(bot):
     check_file()
-    bot.add_cog(DCSServerStatus(bot)
+    bot.add_cog(DCSServerStatus(bot))
