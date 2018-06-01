@@ -26,7 +26,7 @@ class DCSServerStatus:
 
 
     def get_status(self):
-        url = self.base_url + self.key_data.key
+        url = self.base_url + self.key_data["key"]
         resp = self.session.get(url)
         status = json.load(resp.text())
         return status
@@ -46,7 +46,7 @@ class DCSServerStatus:
         key = {}
         key["key"] = text
         self.store_key(key)
-        await self.bot.say("Updated Key to {}".format(key.key))
+        await self.bot.say("Updated Key to {}".format(key["key"]))
 
 def check_folders():
     if not os.path.exists("data/server_status"):
