@@ -31,7 +31,7 @@ class DCSServerStatus:
         status = json.load(resp.text())
         return status
 
-    @commands.group(name="server")
+    @commands.group(name="server_status")
     @checks.mod_or_permissions(manage_server=True)
     async def key(self, *, text = ""):
         key = {}
