@@ -1,0 +1,10 @@
+{
+    "AUTHOR": "Hoggit",
+    "INSTALL_MSG": "Hoggit Server Status Installed. Use !server_status key <key> to enter your api key",
+    "NAME": "DCS Server Status",
+    "SHORT": "Displays your DCS Server's status",
+    "DESCRIPTION": "Responds with details about your server's dcs status.",
+    "TAGS": ["utility"],
+    "REQUIREMENTS": [],
+    "HIDDEN": false
+}
