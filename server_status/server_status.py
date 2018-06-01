@@ -22,7 +22,7 @@ class DCSServerStatus:
 
     def store_key(self, key):
         self.key_data = key
-        dataIO.save_json(self.file_path, self.key_data)
+        dataIO.save_json(self.key_file, self.key_data)
 
 
     def get_status(self):
