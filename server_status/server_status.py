@@ -40,7 +40,7 @@ class DCSServerStatus:
                 status = self.get_status()
                 await self.bot.say("Would look up status if I worked... Thanks")
 
-    @commands.group(name="server_status")
+    @commands.group(name="server")
     @checks.mod_or_permissions(manage_server=True)
     async def key(self, *, text = ""):
         key = {}
