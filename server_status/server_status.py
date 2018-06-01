@@ -39,6 +39,7 @@ class DCSServerStatus:
             else:
                 status = self.get_status()
                 await self.bot.say("Would look up status if I worked... Thanks")
+                await self.bot.say("Got {}".format(status))
 
     @commands.command(name = "server_status_key")
     @checks.mod_or_permissions(manage_server=True)
