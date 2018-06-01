@@ -25,7 +25,7 @@ class DCSServerStatus:
         dataIO.save_json(self.key_file, self.key_data)
 
 
-    def get_status(self):
+    async def get_status(self):
         url = self.base_url + self.key_data["key"]
         resp = await self.session.get(url)
         status = json.load(await resp.text())
