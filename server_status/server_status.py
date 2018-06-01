@@ -40,7 +40,7 @@ class DCSServerStatus:
         await self.bot.say("Updated Key to {}".format(key.key))
 
     @commands.command()
-    async def server(self):
+    async def dedi(self):
         if (self.key_data == {}):
             await self.bot.say("Configure the key first bud")
         else:
