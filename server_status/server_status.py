@@ -5,6 +5,7 @@ from .utils import checks
 from .utils.dataIO import dataIO
 import json
 import aiohttp
+import os
 from bs4 import BeautifulSoup
 
 class DCSServerStatus:
