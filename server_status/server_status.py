@@ -46,6 +46,11 @@ class DCSServerStatus:
             status = self.get_status()
             await self.bot.say("Would look up status if I worked... Thanks")
 
+def check_folders():
+    if not os.path.exists("data/server_status"):
+        print("Creating the server_status folder")
+        os.makedirs("data/server_status")
+
 def check_file():
     f = "data/server_status/server.json"
     if not dataIO.is_valid_json(f):
@@ -53,5 +58,6 @@ def check_file():
         dataIO.save_json(f, {})
 
 def setup(bot):
+    check_folders()
     check_file()
     bot.add_cog(DCSServerStatus(bot))
