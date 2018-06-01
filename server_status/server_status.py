@@ -28,7 +28,7 @@ class DCSServerStatus:
     def get_status(self):
         url = self.base_url + self.key_data["key"]
         resp = self.session.get(url)
-        status = json.load(resp.text())
+        status = json.load(await resp.text())
         return status
 
     @commands.command(pass_context=True)
