@@ -31,8 +31,8 @@ class DCSServerStatus:
         status = json.load(resp.text())
         return status
 
-    @commands.command(name = "server", pass_context=True)
-    async def dedicated(self, ctx):
+    @commands.command(name = "server_status", pass_context=True)
+    async def server_status(self, ctx):
         if ctx.invoked_subcommand is None:
             if (self.key_data == {}):
                 await self.bot.say("Configure the key first bud")
