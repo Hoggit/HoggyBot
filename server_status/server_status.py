@@ -31,6 +31,15 @@ class DCSServerStatus:
         status = json.load(resp.text())
         return status
 
+    @commands.group(name="server", pass_context=True)
+    async def server(self, ctx):
+        if ctx.invoked_subcommand is None:
+            if (self.key_data == {}):
+                await self.bot.say("Configure the key first bud")
+            else:
+                status = self.get_status()
+                await self.bot.say("Would look up status if I worked... Thanks")
+
     @commands.group(name="server_status")
     @checks.mod_or_permissions(manage_server=True)
     async def key(self, *, text = ""):
@@ -38,14 +47,6 @@ class DCSServerStatus:
         key["key"] = text
         self.store_key(key)
         await self.bot.say("Updated Key to {}".format(key.key))
-
-    @commands.command()
-    async def dedi(self):
-        if (self.key_data == {}):
-            await self.bot.say("Configure the key first bud")
-        else:
-            status = self.get_status()
-            await self.bot.say("Would look up status if I worked... Thanks")
 
 def check_folders():
     if not os.path.exists("data/server_status"):
