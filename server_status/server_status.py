@@ -31,7 +31,7 @@ class DCSServerStatus:
         status = json.load(resp.text())
         return status
 
-    @commands.command(name = "server_status", pass_context=True)
+    @commands.command(pass_context=True)
     async def server_status(self, ctx):
         if ctx.invoked_subcommand is None:
             if (self.key_data == {}):
@@ -40,7 +40,7 @@ class DCSServerStatus:
                 status = self.get_status()
                 await self.bot.say("Would look up status if I worked... Thanks")
 
-    @commands.command(name = "server_status_key")
+    @commands.command(name = "server_status")
     @checks.mod_or_permissions(manage_server=True)
     async def key(self, *, text = ""):
         key = {}
