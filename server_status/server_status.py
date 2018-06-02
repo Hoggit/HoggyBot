@@ -49,7 +49,7 @@ class DCSServerStatus:
             else:
                 status = await self.get_status()
                 message = self.embedMessage(status)
-                await self.boy.say(embed=embed)
+                await self.bot.say(embed=embed)
 
     @commands.command(name = "server_status_key")
     @checks.mod_or_permissions(manage_server=True)
