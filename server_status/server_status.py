@@ -31,6 +31,16 @@ class DCSServerStatus:
         status = json.loads(await resp.text())
         return status
 
+    def embedMessage(self, status):
+        embed=discord.Embed(color=0x05e400)
+        embed.set_author(name="Dedicated Server",, icon_url="https://i.imgur.com/KEd7OQJ.png")
+        embed.set_thumbnail(url="https://i.imgur.com/KEd7OQJ.png")
+        embed.add_field(name="Players", value="{}/{}".format(status.players, status.maxPlayers), inline=False)
+        embed.add_field(name="Map", value="{}".format(status.serverName), inline=True)
+        embed.set_footer(text="Brought to you by Hoggit")
+        return embed
+
+
     @commands.command(pass_context=True)
     async def server_status(self, ctx):
         if ctx.invoked_subcommand is None:
@@ -38,8 +48,8 @@ class DCSServerStatus:
                 await self.bot.say("Configure the key first bud")
             else:
                 status = await self.get_status()
-                await self.bot.say("Would look up status if I worked... Thanks")
-                await self.bot.say("Got {}".format(status))
+                message = self.embedMessage(status)
+                await self.boy.say(embed=embed)
 
     @commands.command(name = "server_status_key")
     @checks.mod_or_permissions(manage_server=True)
