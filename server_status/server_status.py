@@ -8,6 +8,10 @@ import aiohttp
 import os
 from bs4 import BeautifulSoup
 
+class ErrorGettingStatus(Exception):
+    def __init__(self, statusCode):
+        self.status=statusCode
+
 class DCSServerStatus:
     """
     Returns the status of your DCS server
@@ -28,6 +32,8 @@ class DCSServerStatus:
     async def get_status(self):
         url = self.base_url + self.key_data["key"]
         resp = await self.session.get(url)
+        if (resp.status != 200):
+            raise ErrorGettingStatus()
         status = json.loads(await resp.text())
         return status
 
@@ -44,12 +50,15 @@ class DCSServerStatus:
     @commands.group(pass_context=True, aliases=["server"])
     async def server_status(self, ctx):
         if ctx.invoked_subcommand is None:
-            if (self.key_data == {}):
+            if (self.key_data == {} or self.key_data["key"] == ''):
                 await self.bot.say("Configure the key first bud")
             else:
-                status = await self.get_status()
-                message = self.embedMessage(status)
-                await self.bot.say(embed=message)
+                try:
+                    status = await self.get_status()
+                    message = self.embedMessage(status)
+                    await self.bot.say(embed=message)
+                except ErrorGettingStatus as e:
+                    await self.bot.say("Can't get status right now. Got {}".format(e.status))
 
     @server_status.command()
     @checks.mod_or_permissions(manage_server=True)
