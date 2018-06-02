@@ -37,7 +37,7 @@ class DCSServerStatus:
             if (self.key_data == {}):
                 await self.bot.say("Configure the key first bud")
             else:
-                status = self.get_status()
+                status = await self.get_status()
                 await self.bot.say("Would look up status if I worked... Thanks")
                 await self.bot.say("Got {}".format(status))
 
