@@ -35,8 +35,8 @@ class DCSServerStatus:
         embed=discord.Embed(color=0x05e400)
         embed.set_author(name="Dedicated Server", icon_url="https://i.imgur.com/KEd7OQJ.png")
         embed.set_thumbnail(url="https://i.imgur.com/KEd7OQJ.png")
-        embed.add_field(name="Players", value="{}/{}".format(status.players, status.maxPlayers), inline=False)
-        embed.add_field(name="Map", value="{}".format(status.serverName), inline=True)
+        embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=False)
+        embed.add_field(name="Map", value="{}".format(status["serverName"]), inline=True)
         embed.set_footer(text="Brought to you by Hoggit")
         return embed
 
