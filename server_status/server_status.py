@@ -41,7 +41,7 @@ class DCSServerStatus:
         return embed
 
 
-    @commands.command(pass_context=True)
+    @commands.group(pass_context=True, aliases=["server"])
     async def server_status(self, ctx):
         if ctx.invoked_subcommand is None:
             if (self.key_data == {}):
@@ -51,7 +51,7 @@ class DCSServerStatus:
                 message = self.embedMessage(status)
                 await self.bot.say(embed=message)
 
-    @commands.command(name = "server_status_key")
+    @server_status.command()
     @checks.mod_or_permissions(manage_server=True)
     async def key(self, *, text = ""):
         key = {}
