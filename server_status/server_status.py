@@ -74,6 +74,12 @@ class DCSServerStatus:
         last_update = arrow.get(status["updateTime"])
         return ServerHealth(last_update)
 
+    def humanize_time(self, updateTime):
+        print "Got time: {}".format(updateTime)
+        arrowtime = arrow.get(updateTime)
+        print "humanize time: {}".format(arrowtime.humanize())
+        return arrowtime.humanize()
+
     def embedMessage(self, status):
         health = self.determine_health(status)
         embed=discord.Embed(color=health.color)
@@ -83,7 +89,7 @@ class DCSServerStatus:
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=False)
         #Omit the map until we can get it.
         #embed.add_field(name="Map", value="{}".format(status["serverName"]), inline=True)
-        embed.set_footer(text="Last update: {}".format(arrow.get(status["updateTime"]).humanize()))
+        embed.set_footer(text="Last update: {}".format(self.humanize_time(status["updateTime"])))
         return embed
 
 
