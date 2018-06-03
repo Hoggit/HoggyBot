@@ -6,11 +6,44 @@ from .utils.dataIO import dataIO
 import json
 import aiohttp
 import os
+import arrow
 from bs4 import BeautifulSoup
 
 class ErrorGettingStatus(Exception):
     def __init__(self, statusCode):
         self.status=statusCode
+
+class ServerHealth():
+    """
+    Returns a ServerHealth with a health status string indicating "Online", "Unhealthy", "Offline"
+    and a `color` for use in graphics.
+    Green - Online
+    Orange - Unhealthy
+    Red - Offline
+    """
+
+    def __init__(self, updateTime):
+        self.status = determine_status(updateTime)
+        self.color = self.determine_color(self.status)
+
+
+    def determine_status(self, updateTime):
+        now = arrow.utcnow()
+        status = "Online"
+        if (updateTime < now.shift(minutes=-5)):
+            status = "Unhealthy"
+        if (updateTime < now.shift(minutes=-10)):
+            status = "Offline"
+        return status
+
+
+    def determine_color(self, status):
+        if (status == "Online"):
+            return 0x05e400
+        if (status == "Unhealthy"):
+            return 0xFF9700
+        return 0xFF0000
+
 
 class DCSServerStatus:
     """
@@ -37,11 +70,16 @@ class DCSServerStatus:
         status = json.loads(await resp.text())
         return status
 
+    def determine_health(self, status):
+        last_update = arrow.get(status["updateTime"])
+        return ServerHealth(last_update)
+
     def embedMessage(self, status):
-        embed=discord.Embed(color=0x05e400)
+        health = self.determine_health(status)
+        embed=discord.Embed(color=health.color)
         embed.set_author(name=status["serverName"], icon_url="https://i.imgur.com/KEd7OQJ.png")
         embed.set_thumbnail(url="https://i.imgur.com/KEd7OQJ.png")
-        embed.add_field(name="Status", value="Online", inline=False)
+        embed.add_field(name="Status", value=health.status, inline=False)
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=False)
         #Omit the map until we can get it.
         #embed.add_field(name="Map", value="{}".format(status["serverName"]), inline=True)

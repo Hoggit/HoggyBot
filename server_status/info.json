@@ -5,6 +5,6 @@
     "SHORT": "Displays your DCS Server's status",
     "DESCRIPTION": "Responds with details about your server's dcs status.",
     "TAGS": ["utility"],
-    "REQUIREMENTS": [],
+    "REQUIREMENTS": ["arrow"],
     "HIDDEN": false
 }
