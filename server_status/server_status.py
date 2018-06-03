@@ -75,9 +75,9 @@ class DCSServerStatus:
         return ServerHealth(last_update)
 
     def humanize_time(self, updateTime):
-        print "Got time: {}".format(updateTime)
+        print("Got time: {}".format(updateTime))
         arrowtime = arrow.get(updateTime)
-        print "humanize time: {}".format(arrowtime.humanize())
+        print("humanize time: {}".format(arrowtime.humanize()))
         return arrowtime.humanize()
 
     def embedMessage(self, status):
