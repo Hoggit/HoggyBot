@@ -83,7 +83,7 @@ class DCSServerStatus:
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=False)
         #Omit the map until we can get it.
         #embed.add_field(name="Map", value="{}".format(status["serverName"]), inline=True)
-        embed.set_footer(text="Last update: {}".format(arrow.get(status["updateTime"]).humanize))
+        embed.set_footer(text="Last update: {}".format(arrow.get(status["updateTime"]).humanize()))
         return embed
 
 
