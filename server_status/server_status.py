@@ -23,7 +23,7 @@ class ServerHealth():
     """
 
     def __init__(self, updateTime):
-        self.status = determine_status(updateTime)
+        self.status = self.determine_status(updateTime)
         self.color = self.determine_color(self.status)
 
 
