@@ -165,10 +165,10 @@ class HoggitWiki:
 
         `channel` must be a channel that the bot can send messages to
         """
-        print("New alert requested for channel {}".format(channel.name))
+        print("New alert requested for channel {}".format(chan.name))
         self.alerts["channel"] = chan
         self.start_alerts()
-        await self.bot.say("Started an alert for {}".format(channel.name))
+        await self.bot.say("Started an alert for {}".format(chan.name))
 
 def setup(bot):
     if not os.path.exists("data/wiki"):
