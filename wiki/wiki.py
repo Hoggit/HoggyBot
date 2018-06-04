@@ -36,7 +36,6 @@ class HoggitWiki:
             asyncio.ensure_future(self._alert(channel))
 
     def format_recent_changes(self, results):
-        formatted = []
         embed=discord.Embed(title="Wiki changes since {}".format(self.last_wiki_check.humanize()))
         results_length = len(results)
         trimmed_results = results[:5]
@@ -45,7 +44,7 @@ class HoggitWiki:
 
         if results_length > 5:
             embed.set_footer(text="And {} more changes omitted".format(results.length - 5))
-        return formatted
+        return embed
 
 
     async def _alert(self, chan_id):
