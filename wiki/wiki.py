@@ -142,7 +142,7 @@ class HoggitWiki:
                 fileIO('data/wiki/synonyms.json', 'save', self.synonyms)
                 await self.bot.say("Synonym {0} -> {1} removed".format(syn, target))
 
-    @commands.command()
+    @commands.group()
     async def wiki(self, *search_text):
         query = ' '.join(search_text)
         if query.lower() in self.synonyms.keys():
