@@ -165,7 +165,7 @@ class HoggitWiki:
     @commands.command(name="embed-test")
     async def embed_test(self):
         embed=discord.Embed()
-        embed.add_field(name=[F/A-18C](http://www.google.com), value=[Acidictadpole - 3 minutes ago](http://acidictadpole.com), inline=False)
+        embed.add_field(name="[F/A-18C](http://www.google.com)", value="[Acidictadpole - 3 minutes ago](http://acidictadpole.com)", inline=False)
         await self.bot.say(embed=embed)
 
     @commands.command(name="wiki-alert")
