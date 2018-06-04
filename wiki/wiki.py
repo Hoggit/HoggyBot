@@ -142,17 +142,18 @@ class HoggitWiki:
                 fileIO('data/wiki/synonyms.json', 'save', self.synonyms)
                 await self.bot.say("Synonym {0} -> {1} removed".format(syn, target))
 
-    @commands.group()
+    @commands.group(pass_context=True)
     async def wiki(self, *search_text):
-        query = ' '.join(search_text)
-        if query.lower() in self.synonyms.keys():
-            query = self.synonyms[query.lower()]
+        if ctx.invoked_subcommand is None:
+            query = ' '.join(search_text)
+            if query.lower() in self.synonyms.keys():
+                query = self.synonyms[query.lower()]
 
-        resp = await self.session.get(self.url(query))
-        if HoggitWiki.was_redirect(resp):
-            await self.bot_say_single_result(resp.url)
-        else:
-            await self.bot_say_search_results(resp)
+            resp = await self.session.get(self.url(query))
+            if HoggitWiki.was_redirect(resp):
+                await self.bot_say_single_result(resp.url)
+            else:
+                await self.bot_say_search_results(resp)
 
     @wiki.command(name="alert", no_pm=True)
     @checks.mod_or_permissions(manage_server=True)
@@ -162,6 +163,7 @@ class HoggitWiki:
 
         `channel` must be a channel that the bot can send messages to
         """
+        print("New alert requested for channel {}".format(channel.name))
         self.alerts["channel"] = chan
         self.start_alerts()
 
