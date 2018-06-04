@@ -27,6 +27,11 @@ class HoggitWiki:
         self.alerts = fileIO('data/wiki/alerts.json', 'load')
         self.start_alerts()
 
+
+    def __unload(self):
+        #Needed to not reschedule the next check.
+        self.killswitch = True
+
     def start_alerts(self):
         if "channel" not in self.alerts:
             print("Wiki: No alerts to start")
@@ -49,6 +54,8 @@ class HoggitWiki:
 
     async def _alert(self, chan_id):
         await asyncio.sleep(300) #10 minutes
+        if self.killSwitch:
+            return
         timestamp = self.last_wiki_check.format('YYYY-MM-DDTHH:mm:ss')
         url = self.recent_changes_url + "&rcend=" + timestamp
         try:
@@ -61,11 +68,11 @@ class HoggitWiki:
                 formatted_results = self.format_recent_changes(results)
                 self.last_wiki_check = arrow.utcnow()
                 channel = self.bot.get_channel(chan_id)
-                await self.bot.send_message(channel, formatted_results)
+                await self.bot.send_message(channel, embed=formatted_results)
         except:
             print("Wiki: Unexpected error sending wiki recent changes: " + sys.exc_info()[0])
         finally:
-            if self.alerts["channel"] == chan_id:
+            if self.alerts["channel"] == chan_id and not self.killSwitch:
                 asyncio.ensure_future(self._alert(chan_id))
 
     def url(self, search):
