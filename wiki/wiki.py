@@ -24,7 +24,7 @@ class HoggitWiki:
         self.base_url = "https://wiki.hoggitworld.com"
         self.recent_changes_url = self.base_url + "/api.php?action=query&list=recentchanges&rcprop=user|title|timestamp&format=json&rctype=edit"
         self.last_wiki_check = arrow.utcnow()
-        self.alerts = fileIO('data/iki/alerts.json', 'load')
+        self.alerts = fileIO('data/wiki/alerts.json', 'load')
         self.start_alerts()
 
     def start_alerts(self):
