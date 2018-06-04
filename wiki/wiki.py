@@ -56,7 +56,7 @@ class HoggitWiki:
             recent_changes = json.loads(await response.text())
             results = recent_changes["query"]["recentchanges"]
             if not results:
-                print("Wiki-Alerts: Checked wiki but no updates. Continuing..."
+                print("Wiki-Alerts: Checked wiki but no updates. Continuing...")
             else:
                 formatted_results = self.format_recent_changes(results)
                 await self.bot.send_message(channel, formatted_results)
