@@ -52,7 +52,7 @@ class HoggitWiki:
         timestamp = self.last_wiki_check.format('YYYY-MM-DDTHH:mm:ss')
         url = self.recent_changes_url + "&rcend=" + timestamp
         try:
-            response = self.session.get(url)
+            response = await self.session.get(url)
             recent_changes = json.loads(await response.text())
             results = recent_changes["query"]["recentchanges"]
             formatted_results = self.format_recent_changes(results)
