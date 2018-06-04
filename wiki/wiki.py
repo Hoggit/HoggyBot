@@ -7,7 +7,7 @@ import json
 from bs4 import BeautifulSoup
 from .utils.chat_formatting import pagify
 from .utils import checks
-from .utils.dataIO import fileIO
+from .utils.dataIO import fileIO, dataIO
 from discord.ext import commands
 
 
@@ -29,10 +29,10 @@ class HoggitWiki:
 
     def start_alerts(self):
         if "channel" not in self.alerts:
-            print("No alerts to start")
+            print("Wiki: No alerts to start")
         else:
             channel = self.alerts["channel"]
-            print("Starting alerting to channel: " + channel.name)
+            print("Wiki: Starting alerting to channel: " + channel.name)
             asyncio.ensure_future(self._alert(channel))
 
     def format_recent_changes(self, results):
@@ -55,10 +55,13 @@ class HoggitWiki:
             response = await self.session.get(url)
             recent_changes = json.loads(await response.text())
             results = recent_changes["query"]["recentchanges"]
-            formatted_results = self.format_recent_changes(results)
-            await self.bot.send_message(channel, formatted_results)
+            if not results:
+                print("Wiki-Alerts: Checked wiki but no updates. Continuing..."
+            else:
+                formatted_results = self.format_recent_changes(results)
+                await self.bot.send_message(channel, formatted_results)
         except:
-            print("Unexpected error sending wiki recent changes: " + sys.exc_info()[0])
+            print("Wiki: Unexpected error sending wiki recent changes: " + sys.exc_info()[0])
         finally:
             if self.alerts["channel"] == channel:
                 asyncio.ensure_future(self._alert(channel))
@@ -68,13 +71,13 @@ class HoggitWiki:
 
     @staticmethod
     def was_redirect(resp):
-        print("==============================================")
+        print("Wiki: ==============================================")
         print(resp)
-        print("==============================================")
+        print("Wiki: ==============================================")
         print(resp.status)
-        print("++++++++++++++++++++++++++++++++++++++++++++++")
+        print("Wiki: ++++++++++++++++++++++++++++++++++++++++++++++")
         print(resp.history)
-        print("----------------------------------------------")
+        print("Wiki: ----------------------------------------------")
         return len(resp.history) > 0
 
     async def bot_say_single_result(self, result_url):
@@ -144,8 +147,8 @@ class HoggitWiki:
 
     @commands.command(pass_context=True)
     async def wiki(self, ctx, *search_text):
-        print("Invoked subcommand? {}".format(ctx.invoked_subcommand))
-        print("subcommand? {}".format(ctx.subcommand_passed))
+        print("Wiki: Invoked subcommand? {}".format(ctx.invoked_subcommand))
+        print("Wiki: subcommand? {}".format(ctx.subcommand_passed))
         if ctx.invoked_subcommand is None:
             query = ' '.join(search_text)
             if query.lower() in self.synonyms.keys():
@@ -165,25 +168,25 @@ class HoggitWiki:
 
         `channel` must be a channel that the bot can send messages to
         """
-        print("New alert requested for channel {}".format(chan.name))
+        print("Wiki: New alert requested for channel {}".format(chan.name))
         self.alerts["channel"] = chan
         self.start_alerts()
-        fileIO('data/wiki/alerts.json', 'save', self.alerts)
+        dataIO.save_json(self.alerts, 'data/wiki/alerts.json')
         await self.bot.say("Started an alert for {}".format(chan.name))
 
 def setup(bot):
     if not os.path.exists("data/wiki"):
-        print("Creating data/wiki folder...")
+        print("Wiki: Creating data/wiki folder...")
         os.makedirs("data/wiki")
 
     f = "data/wiki/synonyms.json"
     if not fileIO(f, "check"):
-        print("Creating empty synonyms.json...")
+        print("Wiki: Creating empty synonyms.json...")
         fileIO(f, "save", {})
 
     f = "data/wiki/alerts.json"
     if not fileIO(f, "check"):
-        print("Creating empty alerts.json...")
+        print("Wiki: Creating empty alerts.json...")
         fileIO(f, "save", {})
 
     bot.add_cog(HoggitWiki(bot))
