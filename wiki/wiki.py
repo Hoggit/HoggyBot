@@ -173,7 +173,7 @@ class HoggitWiki:
         print("Wiki: New alert requested for channel {}".format(chan.name))
         self.alerts["channel"] = chan.id
         self.start_alerts()
-        dataIO.save_json(self.alerts, 'data/wiki/alerts.json')
+        dataIO.save_json('data/wiki/alerts.json', self.alerts)
         await self.bot.say("Started an alert for {}".format(chan.name))
 
 def setup(bot):
@@ -189,6 +189,6 @@ def setup(bot):
     f = "data/wiki/alerts.json"
     if not fileIO(f, "check"):
         print("Wiki: Creating empty alerts.json...")
-        fileIO(f, "save", {})
+        dataIO.save_json(f, {})
 
     bot.add_cog(HoggitWiki(bot))
