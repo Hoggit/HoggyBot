@@ -56,12 +56,12 @@ class HoggitWiki:
             recent_changes = json.loads(await response.text())
             results = recent_changes["query"]["recentchanges"]
             formatted_results = self.format_recent_changes(results)
-            self.bot.send_message(channel, formatted_results)
+            await self.bot.send_message(channel, formatted_results)
         except:
             print("Unexpected error sending wiki recent changes: " + sys.exc_info()[0])
         finally:
             if self.alerts["channel"] == channel:
-                asyncio.ensure_future(self.alert(channel))
+                asyncio.ensure_future(self._alert(channel))
 
     def url(self, search):
         return self.base_url + "/index.php?title=Special%3ASearch&search={}&go=Go".format(search)
@@ -168,6 +168,7 @@ class HoggitWiki:
         print("New alert requested for channel {}".format(chan.name))
         self.alerts["channel"] = chan
         self.start_alerts()
+        fileIO('data/wiki/alerts.json', 'save', self.alerts)
         await self.bot.say("Started an alert for {}".format(chan.name))
 
 def setup(bot):
