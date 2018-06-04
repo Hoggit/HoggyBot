@@ -37,13 +37,14 @@ class HoggitWiki:
 
     def format_recent_changes(self, results):
         formatted = []
-        for result in results:
-            formatted_result = "{} by {} - {}".format(
-                result["title"],
-                result["user"],
-                arrow.get(result["timestamp"]).humanize()
-                )
-            formatted.append(formatted_result)
+        embed=discord.Embed(title="Wiki changes since {}".format(self.last_wiki_check.humanize()))
+        results_length = len(results)
+        trimmed_results = results[:5]
+        for result in trimmed_results:
+            embed.add_field(name=result["title"], value="{} - {}".format(result["user"],arrow.get(result["timestamp"]).humanize())
+
+        if results_length > 5:
+            embed.set_footer(text="And {} more changes omitted".format(results.length - 5))
         return formatted
 
 
@@ -165,7 +166,7 @@ class HoggitWiki:
     @commands.command(name="embed-test")
     async def embed_test(self):
         embed=discord.Embed()
-        embed.add_field(name="[F/A-18C](http://www.google.com)", value="[Acidictadpole - 3 minutes ago](http://acidictadpole.com)", inline=False)
+        embed.add_field(name="[F/A-18C](http://www.google.com)", value="Acidictadpole - 3 minutes ago", inline=False)
         await self.bot.say(embed=embed)
 
     @commands.command(name="wiki-alert")
