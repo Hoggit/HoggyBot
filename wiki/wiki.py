@@ -59,6 +59,7 @@ class HoggitWiki:
                 print("Wiki-Alerts: Checked wiki but no updates. Continuing...")
             else:
                 formatted_results = self.format_recent_changes(results)
+                self.last_wiki_check = arrow.utcnow()
                 await self.bot.send_message(channel, formatted_results)
         except:
             print("Wiki: Unexpected error sending wiki recent changes: " + sys.exc_info()[0])
