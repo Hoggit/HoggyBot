@@ -47,7 +47,7 @@ class HoggitWiki:
         return formatted
 
 
-    async def _alert(self, channel: discord.Channel):
+    async def _alert(self, chan_id):
         await asyncio.sleep(300) #10 minutes
         timestamp = self.last_wiki_check.format('YYYY-MM-DDTHH:mm:ss')
         url = self.recent_changes_url + "&rcend=" + timestamp
@@ -60,12 +60,13 @@ class HoggitWiki:
             else:
                 formatted_results = self.format_recent_changes(results)
                 self.last_wiki_check = arrow.utcnow()
+                channel = self.bot.get_channel(chan_id)
                 await self.bot.send_message(channel, formatted_results)
         except:
             print("Wiki: Unexpected error sending wiki recent changes: " + sys.exc_info()[0])
         finally:
-            if self.alerts["channel"] == channel:
-                asyncio.ensure_future(self._alert(channel))
+            if self.alerts["channel"] == chan_id:
+                asyncio.ensure_future(self._alert(chan_id))
 
     def url(self, search):
         return self.base_url + "/index.php?title=Special%3ASearch&search={}&go=Go".format(search)
@@ -170,7 +171,7 @@ class HoggitWiki:
         `channel` must be a channel that the bot can send messages to
         """
         print("Wiki: New alert requested for channel {}".format(chan.name))
-        self.alerts["channel"] = chan
+        self.alerts["channel"] = chan.id
         self.start_alerts()
         dataIO.save_json(self.alerts, 'data/wiki/alerts.json')
         await self.bot.say("Started an alert for {}".format(chan.name))
