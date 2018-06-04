@@ -32,7 +32,7 @@ class HoggitWiki:
             print("Wiki: No alerts to start")
         else:
             channel = self.alerts["channel"]
-            print("Wiki: Starting alerting to channel: " + channel.name)
+            print("Wiki: Starting alerting to channel: " + self.bot.get_channel(channel).name
             asyncio.ensure_future(self._alert(channel))
 
     def format_recent_changes(self, results):
