@@ -19,7 +19,7 @@ class HoggitWiki:
     def __init__(self, bot):
         self.bot = bot
         self.session = aiohttp.ClientSession()
-
+        self.killSwitch = false
         self.synonyms = fileIO('data/wiki/synonyms.json', 'load')
         self.base_url = "https://wiki.hoggitworld.com"
         self.recent_changes_url = self.base_url + "/api.php?action=query&list=recentchanges&rcprop=user|title|timestamp&format=json&rctype=edit"
