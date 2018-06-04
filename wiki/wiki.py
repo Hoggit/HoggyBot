@@ -155,7 +155,7 @@ class HoggitWiki:
             else:
                 await self.bot_say_search_results(resp)
 
-    @wiki.command(name="alert", no_pm=True)
+    @_wiki.command(name="alert", no_pm=True)
     @checks.mod_or_permissions(manage_server=True)
     async def _add_alert(self, chan: discord.Channel):
         """
