@@ -48,7 +48,7 @@ class HoggitWiki:
 
 
     async def _alert(self, channel: discord.Channel):
-        await asyncio.sleep(600) #10 minutes
+        await asyncio.sleep(300) #10 minutes
         timestamp = self.last_wiki_check.format('YYYY-MM-DDTHH:mm:ss')
         url = self.recent_changes_url + "&rcend=" + timestamp
         try:
