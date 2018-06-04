@@ -143,7 +143,7 @@ class HoggitWiki:
                 await self.bot.say("Synonym {0} -> {1} removed".format(syn, target))
 
     @commands.group(pass_context=True)
-    async def wiki(self, ctx,  *search_text):
+    async def wiki(self, ctx, *search_text):
         print(ctx)
         if ctx.invoked_subcommand is None:
             query = ' '.join(search_text)
@@ -156,7 +156,7 @@ class HoggitWiki:
             else:
                 await self.bot_say_search_results(resp)
 
-    @wiki.command(no_pm=True)
+    @wiki.command()
     @checks.mod_or_permissions(manage_server=True)
     async def alert(self, chan: discord.Channel):
         """
@@ -167,6 +167,7 @@ class HoggitWiki:
         print("New alert requested for channel {}".format(channel.name))
         self.alerts["channel"] = chan
         self.start_alerts()
+        await self.bot.say("Started an alert for {}".format(channel.name))
 
 def setup(bot):
     if not os.path.exists("data/wiki"):
