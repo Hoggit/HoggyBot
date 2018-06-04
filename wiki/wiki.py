@@ -29,11 +29,11 @@ class HoggitWiki:
 
     def start_alerts(self):
         if "channel" not in self.alerts:
+            print("No alerts to start")
+        else:
             channel = self.alerts["channel"]
             print("Starting alerting to channel: " + channel.name)
             asyncio.ensure_future(self.alert(channel))
-        else:
-            print("No alerts to start")
 
     def format_recent_changes(self, results):
         formatted = []
