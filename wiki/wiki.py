@@ -144,6 +144,7 @@ class HoggitWiki:
 
     @commands.group(pass_context=True, aliases = ["wiki"])
     async def _wiki(self, ctx,  *search_text):
+        print(ctx)
         if ctx.invoked_subcommand is None:
             query = ' '.join(search_text)
             if query.lower() in self.synonyms.keys():
