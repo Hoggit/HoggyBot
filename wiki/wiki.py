@@ -33,7 +33,7 @@ class HoggitWiki:
         else:
             channel = self.alerts["channel"]
             print("Starting alerting to channel: " + channel.name)
-            asyncio.ensure_future(self.alert(channel))
+            asyncio.ensure_future(self._alert(channel))
 
     def format_recent_changes(self, results):
         formatted = []
@@ -47,7 +47,7 @@ class HoggitWiki:
         return formatted
 
 
-    async def alert(self, channel: discord.Channel):
+    async def _alert(self, channel: discord.Channel):
         await asyncio.sleep(600) #10 minutes
         timestamp = self.last_wiki_check.format('YYYY-MM-DDTHH:mm:ss')
         url = self.recent_changes_url + "&rcend=" + timestamp
@@ -142,8 +142,8 @@ class HoggitWiki:
                 fileIO('data/wiki/synonyms.json', 'save', self.synonyms)
                 await self.bot.say("Synonym {0} -> {1} removed".format(syn, target))
 
-    @commands.group(pass_context=True, aliases = ["wiki"])
-    async def _wiki(self, ctx,  *search_text):
+    @commands.group(pass_context=True)
+    async def wiki(self, ctx,  *search_text):
         print(ctx)
         if ctx.invoked_subcommand is None:
             query = ' '.join(search_text)
@@ -156,9 +156,9 @@ class HoggitWiki:
             else:
                 await self.bot_say_search_results(resp)
 
-    @_wiki.command(name="alert", no_pm=True)
+    @wiki.command(name="alert", no_pm=True)
     @checks.mod_or_permissions(manage_server=True)
-    async def _add_alert(self, chan: discord.Channel):
+    async def alert(self, chan: discord.Channel):
         """
         Configures alerts for the hoggit wiki to be sent to the given channel.
 
