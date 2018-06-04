@@ -142,7 +142,7 @@ class HoggitWiki:
                 fileIO('data/wiki/synonyms.json', 'save', self.synonyms)
                 await self.bot.say("Synonym {0} -> {1} removed".format(syn, target))
 
-    @commands.group(pass_context=True)
+    @commands.command(pass_context=True)
     async def wiki(self, ctx, *search_text):
         print("Invoked subcommand? {}".format(ctx.invoked_subcommand))
         print("subcommand? {}".format(ctx.subcommand_passed))
@@ -157,7 +157,7 @@ class HoggitWiki:
             else:
                 await self.bot_say_search_results(resp)
 
-    @wiki.command()
+    @commands.command(name="wiki-alert")
     @checks.mod_or_permissions(manage_server=True)
     async def alert(self, chan: discord.Channel):
         """
