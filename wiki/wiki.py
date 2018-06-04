@@ -28,8 +28,8 @@ class HoggitWiki:
         self.start_alerts()
 
     def start_alerts(self):
-        channel = self.alerts["channel"]
-        if channel:
+        if "channel" not in self.alerts:
+            channel = self.alerts["channel"]
             print("Starting alerting to channel: " + channel.name)
             asyncio.ensure_future(self.alert(channel))
         else:
