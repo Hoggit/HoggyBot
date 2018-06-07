@@ -25,7 +25,6 @@ class HoggitWiki:
         self.recent_changes_url = self.base_url + "/api.php?action=query&list=recentchanges&rcprop=user|title|timestamp&format=json&rctype=edit"
         self.last_wiki_check = arrow.utcnow()
         self.alerts = fileIO('data/wiki/alerts.json', 'load')
-        await self.bot.wait_until_ready()
         self.start_alerts()
 
 
@@ -33,7 +32,8 @@ class HoggitWiki:
         #Needed to not reschedule the next check.
         self.killswitch = True
 
-    def start_alerts(self):
+    async def start_alerts(self):
+        await self.bot.wait_until_ready()
         if "channel" not in self.alerts:
             print("Wiki: No alerts to start")
         else:
