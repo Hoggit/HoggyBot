@@ -25,7 +25,7 @@ class HoggitWiki:
         self.recent_changes_url = self.base_url + "/api.php?action=query&list=recentchanges&rcprop=user|title|timestamp&format=json&rctype=edit"
         self.last_wiki_check = arrow.utcnow()
         self.alerts = fileIO('data/wiki/alerts.json', 'load')
-        self.start_alerts()
+        asyncio.ensure_future(self.start_alerts())
 
 
     def __unload(self):
