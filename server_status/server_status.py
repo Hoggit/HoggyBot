@@ -1,3 +1,4 @@
+import asyncio
 import discord
 from discord.ext import commands
 from .utils.chat_formatting import pagify
@@ -56,6 +57,24 @@ class DCSServerStatus:
         self.key_file = "data/server_status/server.json"
         self.key_data = dataIO.load_json(self.key_file)
         self.base_url = "http://status.hoggitworld.com/"
+        self.start_polling()
+
+    def start_polling(self):
+        asyncio.ensure_future(self.poll())
+        print("Server Status polling started")
+
+
+    async def poll(self):
+        print("Server Status: Poll...")
+        try:
+            status = await self.get_status()
+            print("Server Status Poll: {}".format(status)
+            await self.set_presence(status)
+        except:
+            print("Server poll encountered an error. skipping this poll."
+        finally:
+            asyncio.ensure_future(self.poll())
+
 
     def store_key(self, key):
         self.key_data = key
@@ -69,7 +88,7 @@ class DCSServerStatus:
             bot_status=discord.Status.idle
         elif health.status == "Offline":
             bot_status=discord.Status.dnd
-        print("Server_Status: Trying to set status to {}. Game to {}".format(bot_status, game))
+        print("Server Status: Trying to set status to {}. Game to {}".format(bot_status, game))
         await self.bot.change_presence(status=bot_status, game=discord.Game(name=game))
 
     async def get_status(self):
