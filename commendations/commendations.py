@@ -98,10 +98,10 @@ class Commendations:
             users_commendations = self.c_commendations[server_id][user_id]
             user = ctx.message.server.get_member(user_id).name
             leaders.append("#{} {}: {}".format(rank, user, len(users_commendations)))
+            rank += 1
         message = """
         Top 10 Commendees
-        ```
-        {}
+        ```{}
         ```
         """.format("\n".join(leaders))
         await self.bot.say(message)
