@@ -103,7 +103,7 @@ class Commendations:
         ```
         {}
         ```
-        """.format(leaders.join("\n"))
+        """.format("\n".join(leaders))
         await self.bot.say(message)
 
 
