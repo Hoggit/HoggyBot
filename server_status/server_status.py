@@ -82,6 +82,7 @@ class DCSServerStatus:
         dataIO.save_json(self.key_file, self.key_data)
 
     async def set_presence(self, status):
+        await self.bot.wait_until_ready()
         game="{} players on {}".format(status["players"], status["serverName"])
         health=self.determine_health(status)
         bot_status=discord.Status.online
