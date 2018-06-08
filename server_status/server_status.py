@@ -70,7 +70,7 @@ class DCSServerStatus:
         elif health.status == "Offline":
             bot_status=discord.Status.dnd
         print("Server_Status: Trying to set status to {}. Game to {}".format(bot_status, game))
-        await self.bot.change_presence(status=bot_status, discord.Game(game))
+        await self.bot.change_presence(status=bot_status, game=discord.Game(game))
 
     async def get_status(self):
         url = self.base_url + self.key_data["key"]
