@@ -80,8 +80,8 @@ class Commendations:
         user_comms = server_comms[user.id]
         await self.bot.say("{} has {} commendations".format(user.name, len(user_comms)))
 
-    @commendations.command(name="leaderboard", pass_context=True)
-    async def leaderboard(self, ctx):
+    @commendations.command(name = "leaderboard", pass_context = True)
+    async def leaderboard(self, ctx, *):
         """
         Returns a leaderboard of the top 10 commendees on your server.
         """
@@ -100,6 +100,7 @@ class Commendations:
         Top 10 Commendees
         ```
         {}
+        ```
         """.format(leaders.join("\n"))
         await self.bot.say(message)
 
