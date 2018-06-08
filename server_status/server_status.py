@@ -130,7 +130,7 @@ class DCSServerStatus:
         embed.set_thumbnail(url="https://i.imgur.com/KEd7OQJ.png")
         embed.add_field(name="Status", value=health.status, inline=False)
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=False)
-        embed.set_footer(text="Last update: {}".format(self.humanize_time(status["updateTime"])))
+        embed.set_footer(text="Last update: {}\nSee my status light for up-to-date status.".format(self.humanize_time(status["updateTime"])))
         return embed
 
 
@@ -140,14 +140,13 @@ class DCSServerStatus:
             if (self.key_data == {} or self.key_data["key"] == ''):
                 await self.bot.say("Configure the key first bud")
             else:
-                await self.bot.say("Deprecated. Check my status light and game status in discord for the status of the server.")
-#                try:
-#                    status = await self.get_status()
-#                    message = self.embedMessage(status)
-#                    await self.bot.say(embed=message)
-#                    await self.set_presence(status)
-#                except ErrorGettingStatus as e:
-#                    await self.bot.say("Can't get status right now. Got {}".format(e.status))
+                try:
+                    status = await self.get_status()
+                    message = self.embedMessage(status)
+                    await self.bot.say(embed=message)
+                    await self.set_presence(status)
+                except ErrorGettingStatus as e:
+                    await self.bot.say("Can't get status right now. Got {}".format(e.status))
 
     @server_status.command()
     @checks.mod_or_permissions(manage_server=True)
