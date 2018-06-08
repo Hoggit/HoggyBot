@@ -92,7 +92,8 @@ class DCSServerStatus:
 
     async def set_presence(self, status):
         await self.bot.wait_until_ready()
-        game="{} players on {}".format(status["players"], status["serverName"])
+        players=status["players"]-1
+        game="{} players on {}".format(players, status["serverName"])
         health=self.determine_health(status)
         bot_status=discord.Status.online
         if health.status == "Unhealthy":
@@ -139,13 +140,14 @@ class DCSServerStatus:
             if (self.key_data == {} or self.key_data["key"] == ''):
                 await self.bot.say("Configure the key first bud")
             else:
-                try:
-                    status = await self.get_status()
-                    message = self.embedMessage(status)
-                    await self.bot.say(embed=message)
-                    await self.set_presence(status)
-                except ErrorGettingStatus as e:
-                    await self.bot.say("Can't get status right now. Got {}".format(e.status))
+                await self.bot.say("Deprecated. Check my status light and game status in discord for the status of the server.")
+#                try:
+#                    status = await self.get_status()
+#                    message = self.embedMessage(status)
+#                    await self.bot.say(embed=message)
+#                    await self.set_presence(status)
+#                except ErrorGettingStatus as e:
+#                    await self.bot.say("Can't get status right now. Got {}".format(e.status))
 
     @server_status.command()
     @checks.mod_or_permissions(manage_server=True)
