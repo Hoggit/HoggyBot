@@ -61,6 +61,16 @@ class DCSServerStatus:
         self.key_data = key
         dataIO.save_json(self.key_file, self.key_data)
 
+    async def set_presence(self, status):
+        game="{} players on {}".format(status["players"], status["serverName"])
+        health=self.determine_health(status)
+        bot_status=discord.Status.online
+        if health.status == "Unhealthy":
+            bot_status=discord.Status.idle
+        else if health.status == "Offline"
+            bot_status=discord.Status.dnd
+        print("Server_Status: Trying to set status to {}. Game to {}".format(bot_status, game))
+        await self.bot.change_presence(status=bot_status, discord.Game(game))
 
     async def get_status(self):
         url = self.base_url + self.key_data["key"]
@@ -87,8 +97,6 @@ class DCSServerStatus:
         embed.set_thumbnail(url="https://i.imgur.com/KEd7OQJ.png")
         embed.add_field(name="Status", value=health.status, inline=False)
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=False)
-        #Omit the map until we can get it.
-        #embed.add_field(name="Map", value="{}".format(status["serverName"]), inline=True)
         embed.set_footer(text="Last update: {}".format(self.humanize_time(status["updateTime"])))
         return embed
 
@@ -103,6 +111,7 @@ class DCSServerStatus:
                     status = await self.get_status()
                     message = self.embedMessage(status)
                     await self.bot.say(embed=message)
+                    await self.set_presence(status)
                 except ErrorGettingStatus as e:
                     await self.bot.say("Can't get status right now. Got {}".format(e.status))
 
