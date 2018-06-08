@@ -30,9 +30,9 @@ class ServerHealth():
     def determine_status(self, updateTime):
         now = arrow.utcnow()
         status = "Online"
-        if (updateTime < now.shift(minutes=-5)):
+        if (updateTime < now.shift(seconds=-30)):
             status = "Unhealthy"
-        if (updateTime < now.shift(minutes=-10)):
+        if (updateTime < now.shift(minutes=-1)):
             status = "Offline"
         return status
 
