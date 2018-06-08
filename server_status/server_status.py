@@ -68,7 +68,7 @@ class DCSServerStatus:
         print("Server Status: Poll...")
         try:
             status = await self.get_status()
-            print("Server Status Poll: {}".format(status)
+            print("Server Status Poll: {}".format(status))
             await self.set_presence(status)
         except:
             print("Server poll encountered an error. skipping this poll."
