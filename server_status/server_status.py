@@ -82,7 +82,7 @@ class DCSServerStatus:
             if self.killPoll:
                 print("Server Status poll killswitch received. Not scheduling another poll")
                 return
-            await asyncio.sleep(60)
+            await asyncio.sleep(20)
             asyncio.ensure_future(self.poll())
 
 

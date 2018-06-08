@@ -82,13 +82,6 @@ class HoggitWiki:
 
     @staticmethod
     def was_redirect(resp):
-        print("Wiki: ==============================================")
-        print(resp)
-        print("Wiki: ==============================================")
-        print(resp.status)
-        print("Wiki: ++++++++++++++++++++++++++++++++++++++++++++++")
-        print(resp.history)
-        print("Wiki: ----------------------------------------------")
         return len(resp.history) > 0
 
     async def bot_say_single_result(self, result_url):
