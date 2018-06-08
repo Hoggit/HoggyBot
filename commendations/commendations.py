@@ -90,6 +90,7 @@ class Commendations:
             await self.bot.say("No commendations on this server yet")
             return
         commended_users = sorted(self.c_commendations[server_id], key=lambda x: len(x))[:10]
+        print("Commended users: {}".format(commended_users))
         commended_user_ranks = []
         leaders=[]
         rank=1
