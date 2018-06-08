@@ -130,7 +130,7 @@ class DCSServerStatus:
         embed.set_thumbnail(url="https://i.imgur.com/KEd7OQJ.png")
         embed.add_field(name="Status", value=health.status, inline=False)
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=False)
-        embed.set_footer(text="Last update: {}\nSee my status light for up-to-date status.".format(self.humanize_time(status["updateTime"])))
+        embed.set_footer(text="Last update: {} -- See my status light for up-to-date status.".format(self.humanize_time(status["updateTime"])))
         return embed
 
 
