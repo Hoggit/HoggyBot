@@ -73,6 +73,7 @@ class DCSServerStatus:
         except:
             print("Server poll encountered an error. skipping this poll.")
         finally:
+            await asyncio.sleep(60)
             asyncio.ensure_future(self.poll())
 
 
