@@ -67,7 +67,7 @@ class DCSServerStatus:
         bot_status=discord.Status.online
         if health.status == "Unhealthy":
             bot_status=discord.Status.idle
-        else if health.status == "Offline"
+        elif health.status == "Offline"
             bot_status=discord.Status.dnd
         print("Server_Status: Trying to set status to {}. Game to {}".format(bot_status, game))
         await self.bot.change_presence(status=bot_status, discord.Game(game))
