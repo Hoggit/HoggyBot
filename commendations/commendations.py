@@ -80,6 +80,30 @@ class Commendations:
         user_comms = server_comms[user.id]
         await self.bot.say("{} has {} commendations".format(user.name, len(user_comms)))
 
+    @commendations.command(name="leaderboard", pass_context=True)
+    async def leaderboard(self, ctx):
+        """
+        Returns a leaderboard of the top 10 commendees on your server.
+        """
+        server_id = ctx.message.server.id
+        if server_id not in self.c_commendations:
+            await self.bot.say("No commendations on this server yet")
+            return
+        commended_users = sorted(self.c_commendations[server_id], key=lambda x: len(x))[:10]
+        commended_user_ranks = []
+        leaders=[]
+        rank=1
+        for user_id, commendations in commended_users:
+            user = self.bot.get_member(user_id).name
+            leaders.append("#{} {}: {}".format(rank, user, len(commendations)))
+        message = """
+        Top 10 Commendees
+        ```
+        {}
+        """.format(leaders.join("\n"))
+        await self.bot.say(message)
+
+
 def check_folders():
     if not os.path.exists("data/commendations"):
         print("Creating data/commendations folder...")
