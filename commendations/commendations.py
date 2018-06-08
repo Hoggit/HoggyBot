@@ -94,9 +94,10 @@ class Commendations:
         commended_user_ranks = []
         leaders=[]
         rank=1
-        for user_id, commendations in commended_users:
+        for user_id in commended_users:
+            users_commendations = self.c_commendations[server_id][user_id]
             user = self.bot.get_member(user_id).name
-            leaders.append("#{} {}: {}".format(rank, user, len(commendations)))
+            leaders.append("#{} {}: {}".format(rank, user, len(users_commendations)))
         message = """
         Top 10 Commendees
         ```
