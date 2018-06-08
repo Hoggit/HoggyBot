@@ -92,8 +92,7 @@ class DCSServerStatus:
 
     async def set_presence(self, status):
         await self.bot.wait_until_ready()
-        players=status["players"]-1
-        game="{} players on {}".format(players, status["serverName"])
+        game="{} players on {}".format(status["players"], status["serverName"])
         health=self.determine_health(status)
         bot_status=discord.Status.online
         if health.status == "Unhealthy":
@@ -111,6 +110,7 @@ class DCSServerStatus:
         if (resp.status != 200):
             raise ErrorGettingStatus()
         status = json.loads(await resp.text())
+        status["players"] = status["players"]
         return status
 
     def determine_health(self, status):
