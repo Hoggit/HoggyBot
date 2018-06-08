@@ -4,6 +4,7 @@ import aiohttp
 import discord
 import arrow
 import json
+import sys
 from bs4 import BeautifulSoup
 from .utils.chat_formatting import pagify
 from .utils import checks
