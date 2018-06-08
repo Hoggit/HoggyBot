@@ -112,7 +112,7 @@ class DCSServerStatus:
         status = json.loads(await resp.text())
         #Hoggy Server counts himself among the players.
         status["players"] = status["players"] - 1
-        status["maxPlayers"] = status["players"] - 1
+        status["maxPlayers"] = status["maxPlayers"] - 1
         return status
 
     def determine_health(self, status):
