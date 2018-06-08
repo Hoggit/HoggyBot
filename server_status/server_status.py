@@ -57,7 +57,13 @@ class DCSServerStatus:
         self.key_file = "data/server_status/server.json"
         self.key_data = dataIO.load_json(self.key_file)
         self.base_url = "http://status.hoggitworld.com/"
+        self.killPoll = False
         self.start_polling()
+
+
+    def __unload(self):
+        #kill the polling
+        self.killPoll = True
 
     def start_polling(self):
         asyncio.ensure_future(self.poll())
@@ -71,8 +77,11 @@ class DCSServerStatus:
             print("Server Status Poll: {}".format(status))
             await self.set_presence(status)
         except:
-            print("Server poll encountered an error. skipping this poll.")
+            print("Server Status poll encountered an error. skipping this poll.")
         finally:
+            if self.killPoll:
+                print("Server Status poll killswitch received. Not scheduling another poll")
+                return
             await asyncio.sleep(60)
             asyncio.ensure_future(self.poll())
 
