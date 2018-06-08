@@ -110,7 +110,9 @@ class DCSServerStatus:
         if (resp.status != 200):
             raise ErrorGettingStatus()
         status = json.loads(await resp.text())
-        status["players"] = status["players"]
+        #Hoggy Server counts himself among the players.
+        status["players"] = status["players"] - 1
+        status["maxPlayers"] = status["players"] - 1
         return status
 
     def determine_health(self, status):
@@ -128,7 +130,8 @@ class DCSServerStatus:
         embed=discord.Embed(color=health.color)
         embed.set_author(name=status["serverName"], icon_url="https://i.imgur.com/KEd7OQJ.png")
         embed.set_thumbnail(url="https://i.imgur.com/KEd7OQJ.png")
-        embed.add_field(name="Status", value=health.status, inline=False)
+        embed.add_field(name="Status", value=health.status, inline=True)
+        embed.add_field(name="Map", value=status["map"], inline=False)
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=False)
         embed.set_footer(text="Last update: {} -- See my status light for up-to-date status.".format(self.humanize_time(status["updateTime"])))
         return embed
