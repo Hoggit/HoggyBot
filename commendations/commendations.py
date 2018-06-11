@@ -89,23 +89,26 @@ class Commendations:
         if server_id not in self.c_commendations:
             await self.bot.say("No commendations on this server yet")
             return
-        commended_users = sorted(self.c_commendations[server_id], key=lambda x: len(x))[:10]
+        commended_users = self.topCommendees(self.c_commendations[server_id], 10)
         print("Commended users: {}".format(commended_users))
         commended_user_ranks = []
         leaders=[]
         rank=1
-        for user_id in commended_users:
-            users_commendations = self.c_commendations[server_id][user_id]
+        for user_id, count in commended_users:
             user = ctx.message.server.get_member(user_id).name
-            leaders.append("#{} {}: {}".format(rank, user, len(users_commendations)))
+            leaders.append("#{} {}: {}".format(rank, user, count))
             rank += 1
         message = """
         Top 10 Commendees
-        ```{}
-        ```
+        ```{}```
         """.format("\n".join(leaders))
         await self.bot.say(message)
 
+    def topCommendees(self, commendation_dict, amount):
+        dic_to_list = lambda dic: [(k, len(v)) for (k, v) in dic.iteritems()]
+        commendation_counts = dic_to_list(commendation_dict)
+        commendation_counts = sorted(commendation_counts, key=lambda x: x[1])[:10]
+        return commendation_counts
 
 def check_folders():
     if not os.path.exists("data/commendations"):
