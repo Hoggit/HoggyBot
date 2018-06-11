@@ -107,8 +107,10 @@ class Commendations:
     def topCommendees(self, commendation_dict, amount):
         dic_to_list = lambda dic: [(k, len(v)) for (k, v) in dic.items()]
         commendation_counts = dic_to_list(commendation_dict)
-        commendation_counts = sorted(commendation_counts, key=lambda x: x[1])[:10]
-        return commendation_counts
+        print("commendation counts: {}".format(commendation_counts))
+        commendation_counts = sorted(commendation_counts, key=lambda x: x[1])
+        print("sorted counts: {}".format(commendation_counts))
+        return commendation_counts[:amount]
 
 def check_folders():
     if not os.path.exists("data/commendations"):
