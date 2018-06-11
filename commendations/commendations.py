@@ -108,7 +108,7 @@ class Commendations:
         dic_to_list = lambda dic: [(k, len(v)) for (k, v) in dic.items()]
         commendation_counts = dic_to_list(commendation_dict)
         print("commendation counts: {}".format(commendation_counts))
-        commendation_counts = sorted(commendation_counts, key=lambda x: x[1])
+        commendation_counts = sorted(commendation_counts, key=lambda x: x[1], reverse=True)
         print("sorted counts: {}".format(commendation_counts))
         return commendation_counts[:amount]
 
