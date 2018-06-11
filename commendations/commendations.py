@@ -105,7 +105,7 @@ class Commendations:
         await self.bot.say(message)
 
     def topCommendees(self, commendation_dict, amount):
-        dic_to_list = lambda dic: [(k, len(v)) for (k, v) in dic.iteritems()]
+        dic_to_list = lambda dic: [(k, len(v)) for (k, v) in dic.items()]
         commendation_counts = dic_to_list(commendation_dict)
         commendation_counts = sorted(commendation_counts, key=lambda x: x[1])[:10]
         return commendation_counts
