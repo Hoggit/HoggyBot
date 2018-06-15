@@ -55,7 +55,7 @@ class HoggitWiki:
 
 
     async def _alert(self, chan_id):
-        await asyncio.sleep(300) #10 minutes
+        await asyncio.sleep(3600) #1 hour
         if self.killSwitch:
             return
         timestamp = self.last_wiki_check.format('YYYY-MM-DDTHH:mm:ss')
