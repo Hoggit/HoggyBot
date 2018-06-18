@@ -1,31 +1,49 @@
 import discord
 from discord.ext import commands
+from .utils.dataIO import dataIO
+import os
 
 class Standup:
     """See what people are working on today"""
-    whos_doin_wat = {}
 
     def __init__(self, bot):
         self.bot = bot
+        self.file_path = "data/standup/standup.json"
 
-
+    def get_standups(self):
+        return dataIO.load_json(self.file_path)
+  
+    def write_standups(self, standup):
+        dataIO.save_json(self.file_path, standup)
+    
     @commands.command(pass_context=True)
     async def standup(self, ctx, *, text=None):
         output = ""
         if text is None:
-            Standup.whos_doin_wat.setdefault(ctx.message.channel, {})
-            if Standup.whos_doin_wat[ctx.message.channel] == {}:
+            if self.get_standups() == {}:
                 output = "Apparently no one is working on anything.  Type ```!standup <What you're working on>``` to let people know what you're up to"
             else:
-                for user,task in Standup.whos_doin_wat[ctx.message.channel].items():
+                for user,task in (self.get_standups()).items():
                     output += "{0} is working on: {1}\n".format(user, task)
         else:
-            Standup.whos_doin_wat.setdefault(ctx.message.channel, {})
-            Standup.whos_doin_wat[ctx.message.channel][ctx.message.author.name] = text
+            standups = self.get_standups()
+            standups[ctx.message.author.name] = text
+            self.write_standups(standups)
             output = "{0} is working on {1}".format(ctx.message.author.name, text)
         await self.bot.say(output)
 
+def check_folders():
+    if not os.path.exists("data/standup"):
+        print("Creating data/standup folder...")
+        os.makedirs("data/standup")
 
+def check_file():
+    f = "data/standup/standup.json"
+    if not dataIO.is_valid_json(f):
+        print("Creating empty standup.json...")
+        dataIO.save_json(f, {})
 
 def setup(bot):
+    check_folders()
+    check_file()
     bot.add_cog(Standup(bot))
