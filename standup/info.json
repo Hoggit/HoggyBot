@@ -3,7 +3,7 @@
     "INSTALL_MSG": "Installed standup.",
     "NAME": "Standup",
     "SHORT": "Tracks who's working on what.",
-    "DESCRIPTION": "Tracks, by channel, what each person is working on. Not persisted, restarting the bot will lose data.",
+    "DESCRIPTION": "Tracks, by channel, what each person is working on.",
     "TAGS": ["utility"],
     "REQUIREMENTS": [],
     "HIDDEN": false
