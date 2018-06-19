@@ -26,9 +26,9 @@ class Standup:
                 for user,task in (self.get_standups()).items():
                     output += "{0} is working on: {1}\n".format(user, task)
         else:
-            standup = self.get_standups()
-            standup[ctx.message.author.name] = text
-            self.write_standups(standup)
+            standups = self.get_standups()
+            standups[ctx.message.author.name] = text
+            self.write_standups(standups)
             output = "{0} is working on {1}".format(ctx.message.author.name, text)
         await self.bot.say(output)
 
