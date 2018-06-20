@@ -19,15 +19,17 @@ class Standup:
     @commands.command(pass_context=True)
     async def standup(self, ctx, *, text=None):
         output = ""
+        standups = self.get_standups()
         if text is None:
-            if self.get_standups() == {}:
+            standups.setdefault(ctx.message.channel.name, {})
+            if standups[ctx.message.channel.name] == {}:
                 output = "Apparently no one is working on anything.  Type ```!standup <What you're working on>``` to let people know what you're up to"
             else:
-                for user,task in (self.get_standups()).items():
+                for user,task in standups[ctx.message.channel.name].items():
                     output += "{0} is working on: {1}\n".format(user, task)
         else:
-            standups = self.get_standups()
-            standups[ctx.message.author.name] = text
+            standups.setdefault(ctx.message.channel.name, {})
+            standups[ctx.message.channel.name][ctx.message.author.name] = text
             self.write_standups(standups)
             output = "{0} is working on {1}".format(ctx.message.author.name, text)
         await self.bot.say(output)
