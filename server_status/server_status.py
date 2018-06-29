@@ -92,7 +92,7 @@ class DCSServerStatus:
 
     async def set_presence(self, status):
         await self.bot.wait_until_ready()
-        game="{} players on {}".format(status["players"], status["serverName"])
+        game="{} players on {}".format(status["players"], status["missionName"])
         health=self.determine_health(status)
         bot_status=discord.Status.online
         if health.status == "Unhealthy":
@@ -131,7 +131,8 @@ class DCSServerStatus:
         embed.set_author(name=status["serverName"], icon_url="https://i.imgur.com/KEd7OQJ.png")
         embed.set_thumbnail(url="https://i.imgur.com/KEd7OQJ.png")
         embed.add_field(name="Status", value=health.status, inline=True)
-        embed.add_field(name="Map", value=status["map"], inline=True)
+        embed.add_field(name="Mission", value=status["missionName"], inline=True)
+        embed.add_field(name="Map", value=status["map"], inline=False)
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=False)
         embed.set_footer(text="Last update: {} -- See my status light for up-to-date status.".format(self.humanize_time(status["updateTime"])))
         return embed
