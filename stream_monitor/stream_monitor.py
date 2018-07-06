@@ -39,8 +39,10 @@ class StreamMonitor:
             channel_id = self.data['channel']
             message_id = self.data['message']
             responseTxt = await self.makeRequest(self.data).text()
+            log("Got response text: {}".format(responseTxt))
             channel = self.bot.get_channel(channel_id)
             message = self.bot.get_message(message_id)
+            log("Sending update")
             await self.bot.edit_message(message, responseTxt)
         finally:
             await asyncio.sleep(600)
