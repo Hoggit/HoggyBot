@@ -39,7 +39,8 @@ class StreamMonitor:
                 return
             channel_id = self.data['channel']
             message_id = self.data['message']
-            responseTxt = await self.makeRequest(self.data).text()
+            response = await self.makeRequest(self.data)
+            responseTxt = await response.text()
             log("Got response text: {}".format(responseTxt))
             channel = self.bot.get_channel(channel_id)
             message = self.bot.get_message(message_id)
