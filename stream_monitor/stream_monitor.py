@@ -31,6 +31,7 @@ class StreamMonitor:
 
 
     def makeRequest(self, data):
+        log("sending request")
         url="https://api.twitch.tv/kraken/streams?community_id={}".format(data['community'])
         headers={'Accept': 'application/vnd.twitchtv.v5+json', 'Client-ID': data['clientId']}
         return self.session.get(url, headers=headers)
@@ -51,7 +52,7 @@ class StreamMonitor:
             message_id = self.data['message']
             response = await self.makeRequest(self.data)
             responseTxt = await response.text()
-            #log("Got response text: {}".format(responseTxt))
+            log("Got response. formatting and editing message")
             channel = self.bot.get_channel(channel_id)
             message = await self.bot.get_message(channel, message_id)
             await self.bot.edit_message(message, self.format_results(responseTxt))
