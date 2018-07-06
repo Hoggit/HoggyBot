@@ -14,6 +14,7 @@ class StreamMonitor:
 
     def __init__(self, bot, dataFile):
         self.bot = bot
+        self.dataFile = dataFile
         self.data = fileIO(dataFile, 'load')
         asyncio.ensure_future(self.start_monitor())
 
@@ -46,7 +47,7 @@ class StreamMonitor:
 
 
     def save_data(self, data):
-        fileIO(dataFile, 'save', data)
+        fileIO(self.dataFile, 'save', data)
 
     @commands.group(name="streammon", pass_context=True, no_pm=True, invoke_without_command=True)
     async def _streammon(self, ctx):
