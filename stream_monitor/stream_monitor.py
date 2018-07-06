@@ -75,7 +75,7 @@ def log(s):
 def setup(bot):
     if not os.path.exists('data/streammonitor'):
         log("Creating data/streammonitor folder")
-        os.makedirs('data/wiki')
+        os.makedirs('data/streammonitor')
 
     f = 'data/streammonitor/data.json'
     if not fileOD(f, "check"):
