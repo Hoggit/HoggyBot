@@ -46,7 +46,7 @@ class StreamMonitor:
             log("Sending update")
             await self.bot.edit_message(message, responseTxt)
         finally:
-            await asyncio.sleep(600)
+            await asyncio.sleep(60)
             asyncio.ensure_future(self._poll())
 
 
