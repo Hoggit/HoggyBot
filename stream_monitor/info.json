@@ -3,7 +3,7 @@
     "INSTALL_MSG": "Installed Stream Monitor. Setup with !streammon.",
     "NAME": "Stream Monitor",
     "SHORT": "Tracks live twitch streams",
-    "DESCRIPTION": "Tracks live twitch streams. Check usage with !streams",
+    "DESCRIPTION": "Tracks live twitch streams. Check usage with !streammon",
     "TAGS": ["utility"],
     "REQUIREMENTS": [],
     "HIDDEN": false
