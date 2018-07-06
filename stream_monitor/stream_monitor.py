@@ -14,6 +14,7 @@ class StreamMonitor:
 
     def __init__(self, bot, dataFile):
         self.bot = bot
+        self.session = aiohttp.ClientSession()
         self.dataFile = dataFile
         self.data = fileIO(dataFile, 'load')
         asyncio.ensure_future(self.start_monitor())
