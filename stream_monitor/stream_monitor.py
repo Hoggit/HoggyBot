@@ -78,7 +78,7 @@ def setup(bot):
         os.makedirs('data/streammonitor')
 
     f = 'data/streammonitor/data.json'
-    if not fileOD(f, "check"):
+    if not fileIO(f, "check"):
         log("Creating empty data.json")
         fileIO(f, "save", {})
 
