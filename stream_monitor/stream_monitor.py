@@ -54,14 +54,14 @@ class StreamMonitor:
         """Stream monitor config"""
         await self.bot.send_cmd_help(ctx)
 
-    @_streammon.command(name="community", pass_context=True, no_pm=True)
-    async def _community(self, community_id, ctx):
+    @_streammon.command(name="community", no_pm=True)
+    async def _community(self, community_id):
         """Adds a community to track on twitch.tv. Must be the community _id_"""
         self.data['community'] = community_id
         save_data(self.data)
         await self.bot.say("Tracking community with id: {}".format(community_id))
 
-    @_streammon.command(name="channel", pass_context=True, no_pm=True)
+    @_streammon.command(name="channel", no_pm=True)
     async def _channel(self, channel: discord.Channel):
         self.data['channel'] = channel.id
         await self.bot.say("Set stream alerting channel to {}".format(channel.name))
