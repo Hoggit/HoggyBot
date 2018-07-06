@@ -23,8 +23,7 @@ class StreamMonitor:
         asyncio.ensure_future(self._poll())
 
 
-    @staticmethod
-    def makeRequest(data):
+    def makeRequest(self, data):
         url="https://api.twitch.tv/kraken/streams?community_id={}".format(data['community'])
         headers={'Accept': 'application/vnd.twitchtv.v5+json', 'Client-ID': data['clientId']}
         return self.session.get(url, headers=headers)
@@ -38,7 +37,7 @@ class StreamMonitor:
             return
         channel_id = self.data['channel']
         message_id = self.data['message']
-        responseTxt = await makeRequest(self.data).text()
+        responseTxt = await self.makeRequest(self.data).text()
         channel = self.bot.get_channel(channel_id)
         message = self.bot.get_message(message_id)
         await self.bot.edit_message(message, responseTxt)
