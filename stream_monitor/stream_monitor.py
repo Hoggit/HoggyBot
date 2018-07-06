@@ -47,7 +47,7 @@ class StreamMonitor:
             channel = self.bot.get_channel(channel_id)
             message = await self.bot.get_message(channel, message_id)
             log("Editing message")
-            await self.bot.edit_message(message, responseTxt)
+            await self.bot.edit_message(message, self.format_results(responseTxt))
             log("Edited message")
         except:
             log("Unexpected error: " + sys.exc_info()[0])
@@ -55,6 +55,9 @@ class StreamMonitor:
             await asyncio.sleep(60)
             asyncio.ensure_future(self._poll())
 
+    def format_results(self, responseText):
+        js = json.loads(responseText)
+        return "Found {} streams online".format(len(js['streams']))
 
     def save_data(self, data):
         fileIO(self.dataFile, 'save', data)
