@@ -30,6 +30,11 @@ class StreamMonitor:
 
 
     async def _poll(self):
+        if 'channel' not in self.data:
+            log("No channel configured for alerts. Skipping poll")
+            await asyncio.sleep(600)
+            asyncio.ensure_future(self._poll())
+            return
         channel_id = self.data['channel']
         message_id = self.data['message']
         responseTxt = await makeRequest(self.data).text()
