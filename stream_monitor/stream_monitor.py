@@ -45,8 +45,7 @@ class StreamMonitor:
         asyncio.ensure_future(self._poll())
 
 
-    @staticmethod
-    def save_data(data):
+    def save_data(self, data):
         fileIO(dataFile, 'save', data)
 
     @commands.group(name="streammon", pass_context=True, no_pm=True, invoke_without_command=True)
@@ -58,7 +57,7 @@ class StreamMonitor:
     async def _community(self, community_id):
         """Adds a community to track on twitch.tv. Must be the community _id_"""
         self.data['community'] = community_id
-        save_data(self.data)
+        self.save_data(self.data)
         await self.bot.say("Tracking community with id: {}".format(community_id))
 
     @_streammon.command(name="channel", no_pm=True)
@@ -67,12 +66,12 @@ class StreamMonitor:
         await self.bot.say("Set stream alerting channel to {}".format(channel.name))
         msg = await self.bot.send_message(channel, "Stream Alerts Enabled")
         self.data['message'] = msg.id
-        save_data(self.data)
+        self.save_data(self.data)
 
     @_streammon.command(name="clientid", no_pm=True)
     async def _setClientId(self, clientId):
         self.data['clientId'] = clientId
-        save_data(self.data)
+        self.save_data(self.data)
         await self.bot.say("Updated client Id")
 
 
