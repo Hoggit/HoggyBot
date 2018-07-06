@@ -66,7 +66,7 @@ class StreamMonitor:
     def format_results(self, responseText):
         js = json.loads(responseText)
         streams = js['streams']
-        live_dcs_streams = [s for s in streams if s['stream_type'] == 'live' && s['game'] == 'DCS World']
+        live_dcs_streams = [s for s in streams if s['stream_type'] == 'live' and s['game'] == 'DCS World']
         message = 'Found {} streams online: \n'.format(len(live_dcs_streams))
         for stream in live_dcs_streams:
             stream_name = stream['channel']['display_name']
