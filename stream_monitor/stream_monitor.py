@@ -71,7 +71,7 @@ class StreamMonitor:
         for stream in live_dcs_streams:
             stream_name = stream['channel']['display_name']
             stream_url = stream['channel']['url']
-            message += "{} - {}\n".format(stream_name, stream_url)
+            message += "{} - <{}>\n".format(stream_name, stream_url)
 
         return message
 
