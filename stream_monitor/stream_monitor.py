@@ -17,12 +17,16 @@ class StreamMonitor:
         self.bot = bot
         self.session = aiohttp.ClientSession()
         self.dataFile = dataFile
+        self.killSwitch = False
         self.data = fileIO(dataFile, 'load')
         asyncio.ensure_future(self.start_monitor())
 
     async def start_monitor(self):
         self.bot.wait_until_ready()
         asyncio.ensure_future(self._poll())
+
+    def __unload(self):
+        self.killSwitch = True
 
 
     def makeRequest(self, data):
@@ -35,7 +39,9 @@ class StreamMonitor:
         try:
             if 'channel' not in self.data:
                 log("No channel configured for alerts. Skipping poll")
-                await asyncio.sleep(600)
+                if self.killSwitch:
+                    return
+                await asyncio.sleep(60)
                 asyncio.ensure_future(self._poll())
                 return
             channel_id = self.data['channel']
@@ -52,6 +58,8 @@ class StreamMonitor:
         except:
             log("Unexpected error: " + sys.exc_info()[0])
         finally:
+            if self.killSwitch:
+                return
             await asyncio.sleep(60)
             asyncio.ensure_future(self._poll())
 
