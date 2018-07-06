@@ -46,8 +46,9 @@ class StreamMonitor:
             log("Got response text: {}".format(responseTxt))
             channel = self.bot.get_channel(channel_id)
             message = await self.bot.get_message(channel, message_id)
-            log("Sending update")
+            log("Editing message")
             await self.bot.edit_message(message, responseTxt)
+            log("Edited message")
         except:
             log("Unexpected error: " + sys.exc_info()[0])
         finally:
