@@ -43,7 +43,7 @@ class StreamMonitor:
             responseTxt = await response.text()
             log("Got response text: {}".format(responseTxt))
             channel = self.bot.get_channel(channel_id)
-            message = self.bot.get_message(message_id)
+            message = self.bot.get_message(channel, message_id)
             log("Sending update")
             await self.bot.edit_message(message, responseTxt)
         finally:
