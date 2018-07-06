@@ -1,6 +1,7 @@
 import aiohttp
 import discord
 import json
+import os
 from .utils import checks
 from discord.ext import commands
 
