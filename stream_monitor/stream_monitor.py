@@ -38,6 +38,7 @@ class StreamMonitor:
                 asyncio.ensure_future(self._poll())
                 return
             channel_id = self.data['channel']
+            log("Channel ID: {}".format(channel_id))
             message_id = self.data['message']
             response = await self.makeRequest(self.data)
             responseTxt = await response.text()
@@ -46,6 +47,8 @@ class StreamMonitor:
             message = await self.bot.get_message(channel, message_id)
             log("Sending update")
             await self.bot.edit_message(message, responseTxt)
+        except:
+            log("Unexpected error: " + sys.exc_info()[0])
         finally:
             await asyncio.sleep(60)
             asyncio.ensure_future(self._poll())
