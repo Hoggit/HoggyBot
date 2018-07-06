@@ -3,6 +3,7 @@ import aiohttp
 import discord
 import json
 import os
+import sys
 from .utils import checks
 from .utils.dataIO import fileIO
 from discord.ext import commands
