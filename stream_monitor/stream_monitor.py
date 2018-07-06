@@ -57,7 +57,16 @@ class StreamMonitor:
 
     def format_results(self, responseText):
         js = json.loads(responseText)
-        return "Found {} streams online".format(len(js['streams']))
+        streams = js['streams']
+        live_dcs_streams = [s for s in streams if s['stream_type'] == 'live' && s['game'] == 'DCS World']
+        message = 'Found {} streams online: \n'.format(len(live_dcs_streams))
+        for stream in live_dcs_streams:
+            stream_name = stream['channel']['display_name']
+            stream_url = stream['channel']['url']
+            message += "{} - {}\n".format(stream_name, stream_url)
+
+        return message
+
 
     def save_data(self, data):
         fileIO(self.dataFile, 'save', data)
