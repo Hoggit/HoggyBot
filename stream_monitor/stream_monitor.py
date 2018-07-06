@@ -26,6 +26,7 @@ class StreamMonitor:
         asyncio.ensure_future(self._poll())
 
     def __unload(self):
+        log("Setting killswitch to True!")
         self.killSwitch = True
 
 
@@ -36,11 +37,12 @@ class StreamMonitor:
 
 
     async def _poll(self):
+        if self.killSwitch:
+            log("Killswitch enabled. Stopping polling")
+            return
         try:
             if 'channel' not in self.data:
                 log("No channel configured for alerts. Skipping poll")
-                if self.killSwitch:
-                    return
                 await asyncio.sleep(60)
                 asyncio.ensure_future(self._poll())
                 return
@@ -49,23 +51,21 @@ class StreamMonitor:
             message_id = self.data['message']
             response = await self.makeRequest(self.data)
             responseTxt = await response.text()
-            log("Got response text: {}".format(responseTxt))
+            #log("Got response text: {}".format(responseTxt))
             channel = self.bot.get_channel(channel_id)
             message = await self.bot.get_message(channel, message_id)
-            log("Editing message")
             await self.bot.edit_message(message, self.format_results(responseTxt))
-            log("Edited message")
         except:
             log("Unexpected error: " + sys.exc_info()[0])
         finally:
-            if self.killSwitch:
-                return
             await asyncio.sleep(60)
             asyncio.ensure_future(self._poll())
 
     def format_results(self, responseText):
         js = json.loads(responseText)
         streams = js['streams']
+        if len(streams) == 0:
+            return "No streams currently online"
         live_dcs_streams = [s for s in streams if s['stream_type'] == 'live' and s['game'] == 'DCS World']
         message = 'Found {} streams online: \n'.format(len(live_dcs_streams))
         for stream in live_dcs_streams:
