@@ -152,6 +152,10 @@ class DCSServerStatus:
         arrowtime = arrow.get(updateTime)
         print("humanize time: {}".format(arrowtime.humanize()))
         return arrowtime.humanize()
+    
+    def get_mission_time(self, status):
+        time_seconds = datetime.timedelta(seconds=status["data"]["uptime"])
+        return str(time_seconds).split(".")[0]
 
     def embedMessage(self, status):
         health = self.determine_health(status)
@@ -163,7 +167,7 @@ class DCSServerStatus:
         embed.add_field(name="Map", value=status["map"], inline=True)
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=True)
         if health.status == "Online":
-            embed.add_field(name="Mission Time", value=str(datetime.timedelta(seconds=status["data"]["uptime"])), inline=True)
+            embed.add_field(name="Mission Time", value=self.get_mission_time(status), inline=True)
         else:
             embed.add_field(name="{} Since".format(health.status), value=health.uptime, inline=True)
         embed.set_footer(text="Last update: {} -- See my status light for up-to-date status.".format(self.humanize_time(status["updateTime"])))
