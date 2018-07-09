@@ -6,6 +6,7 @@ from .utils import checks
 from .utils.dataIO import dataIO
 import json
 import aiohttp
+import datetime
 import os
 import arrow
 from bs4 import BeautifulSoup
@@ -24,19 +25,24 @@ class ServerHealth():
     """
 
     def __init__(self, updateTime):
-        self.status = self.determine_status(updateTime)
+        self.uptime_file = "data/server_status/server.json"
+        self.uptime_data = dataIO.load_json(self.uptime_file)
+        self.status = self.determine_status(updateTime, self.uptime_data)
         self.color = self.determine_color(self.status)
+        self.uptime = self.determine_uptime(self.status, self.uptime_data)
 
-
-    def determine_status(self, updateTime):
+    def determine_status(self, updateTime, uptime_data):
         now = arrow.utcnow()
         status = "Online"
+        if "status" not in uptime_data:
+            uptime_data["status"] = ""
         if (updateTime < now.shift(seconds=-30)):
             status = "Unhealthy"
         if (updateTime < now.shift(minutes=-1)):
             status = "Offline"
+        if status != uptime_data["status"]:
+            self.store_uptime(status, updateTime)
         return status
-
 
     def determine_color(self, status):
         if (status == "Online"):
@@ -45,6 +51,28 @@ class ServerHealth():
             return 0xFF9700
         return 0xFF0000
 
+    def determine_uptime(self, status, uptime_data):
+        now = arrow.utcnow()
+        if self.get_uptime()['status'] == status:
+            current_uptime = self.determine_delta(now, uptime_data["time"])
+            return current_uptime
+
+    def get_uptime(self):
+        return dataIO.load_json(self.uptime_file)
+
+    def store_uptime(self, status, time):
+        self.uptime_data["status"] = status
+        self.uptime_data["time"] = time.for_json()
+        dataIO.save_json(self.uptime_file, self.uptime_data)
+
+    def determine_delta(self, current, change):
+        delta = current - arrow.get(change)
+        days = delta.days
+        hours,remainder = divmod(delta.seconds,3600)
+        minutes,seconds = divmod(remainder,60)
+        return "{0} hours {1} minutes {2} seconds".format(
+            hours, minutes, seconds
+        )
 
 class DCSServerStatus:
     """
@@ -132,8 +160,12 @@ class DCSServerStatus:
         embed.set_thumbnail(url="https://i.imgur.com/KEd7OQJ.png")
         embed.add_field(name="Status", value=health.status, inline=True)
         embed.add_field(name="Mission", value=status["missionName"], inline=True)
-        embed.add_field(name="Map", value=status["map"], inline=False)
-        embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=False)
+        embed.add_field(name="Map", value=status["map"], inline=True)
+        embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=True)
+        if health.status == "Online":
+            embed.add_field(name="Mission Time", value=str(datetime.timedelta(seconds=status["data"]["uptime"])), inline=True)
+        else:
+            embed.add_field(name="{} Since".format(health.status), value=health.uptime, inline=True)
         embed.set_footer(text="Last update: {} -- See my status light for up-to-date status.".format(self.humanize_time(status["updateTime"])))
         return embed
 
