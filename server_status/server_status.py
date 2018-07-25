@@ -136,7 +136,7 @@ class DCSServerStatus:
         url = self.base_url + self.key_data["key"]
         resp = await self.session.get(url)
         if (resp.status != 200):
-            raise ErrorGettingStatus()
+            raise ErrorGettingStatus(resp.status)
         status = json.loads(await resp.text())
         #Hoggy Server counts himself among the players.
         status["players"] = status["players"] - 1
@@ -188,7 +188,8 @@ class DCSServerStatus:
                     await self.bot.send_message(ctx.message.author, embed=message)
                     await self.set_presence(status)
                 except ErrorGettingStatus as e:
-                    await self.bot.send_message(ctx.message.author, "Can't get status right now. Got {}".format(e.status))
+                    await self.bot.send_message(ctx.message.author, "Status unknown right now.")
+                    print("Error getting status. Response code was " + str(e.status))
 
     @server_status.command()
     @checks.mod_or_permissions(manage_server=True)
