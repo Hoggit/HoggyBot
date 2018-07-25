@@ -36,9 +36,9 @@ class ServerHealth():
         status = "Online"
         if "status" not in uptime_data:
             uptime_data["status"] = ""
-        if (updateTime < now.shift(seconds=-30)):
+        if (updateTime < now.shift(seconds=-60)):
             status = "Unhealthy"
-        if (updateTime < now.shift(minutes=-1)):
+        if (updateTime < now.shift(seconds=-100)):
             status = "Offline"
         if status != uptime_data["status"]:
             self.store_uptime(status, updateTime)
