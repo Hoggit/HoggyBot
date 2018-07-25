@@ -184,7 +184,7 @@ class DCSServerStatus:
                     print(ctx.message)
                     status = await self.get_status()
                     message = self.embedMessage(status)
-                    if ctx.message.channel:
+                    if not ctx.message.channel.is_private:
                         await self.bot.send_message(ctx.message.author, "Please only use `!server` in PMs with me.")
                     await self.bot.send_message(ctx.message.author, embed=message)
                     await self.set_presence(status)
