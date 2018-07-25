@@ -144,7 +144,7 @@ class DCSServerStatus:
         return status
 
     def determine_health(self, status):
-        last_update = arrow.get(status["updateTime"])
+        last_update = arrow.get(status["data"]["updateTime"])
         return ServerHealth(last_update)
 
     def humanize_time(self, updateTime):
