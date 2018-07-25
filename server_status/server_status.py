@@ -180,17 +180,15 @@ class DCSServerStatus:
             if (self.key_data == {} or self.key_data["key"] == ''):
                 await self.bot.say("Configure the key first bud")
             else:
+                if not ctx.message.channel.is_private:
+                    await self.bot.send_message(ctx.message.author, "Please only use `!server` in PMs with me.")
                 try:
                     print(ctx.message)
                     status = await self.get_status()
                     message = self.embedMessage(status)
-                    if not ctx.message.channel.is_private:
-                        await self.bot.send_message(ctx.message.author, "Please only use `!server` in PMs with me.")
                     await self.bot.send_message(ctx.message.author, embed=message)
                     await self.set_presence(status)
                 except ErrorGettingStatus as e:
-                    if not ctx.message.channel.is_private:
-                        await self.bot.send_message(ctx.message.author, "Please only use `!server` in PMs with me.")
                     await self.bot.send_message(ctx.message.author, "Status unknown right now.")
                     print("Error getting status. Response code was " + str(e.status))
 
