@@ -183,10 +183,12 @@ class DCSServerStatus:
                 try:
                     status = await self.get_status()
                     message = self.embedMessage(status)
-                    await self.bot.say(embed=message)
+                    if ctx.message.channel:
+                        await self.bot.send_message(ctx.message.author, "Please only use `!server` in PMs with me.")
+                    await self.bot.send_message(ctx.message.author, embed=message)
                     await self.set_presence(status)
                 except ErrorGettingStatus as e:
-                    await self.bot.say("Can't get status right now. Got {}".format(e.status))
+                    await self.bot.send_message(ctx.message.author, "Can't get status right now. Got {}".format(e.status))
 
     @server_status.command()
     @checks.mod_or_permissions(manage_server=True)
