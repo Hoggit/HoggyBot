@@ -1,0 +1,10 @@
+{
+    "AUTHOR": "Hoggit",
+    "INSTALL_MSG": "Hoggit comms plan fetcher installed.",
+    "NAME": "DCS Server Status",
+    "SHORT": "Displays the parsed comms plan",
+    "DESCRIPTION": "Fetches the comms plan from google spreadsheets and displays it in a readable format for discord.",
+    "TAGS": ["utility"],
+    "REQUIREMENTS": ["aiohttp"],
+    "HIDDEN": false
+}
