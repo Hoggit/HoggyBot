@@ -49,7 +49,7 @@ class CommsPlan:
         for radio in plan:
             plan_message += "%s: %s\n" % (radio['use'], radio['freq'])
 
-        await self.bot.say(message_template % (plan_message, "Details: %s" % self.comms_plan_url)
+        await self.bot.say(message_template % (plan_message, "Details: %s" % self.comms_plan_url))
 
     @commands.group(pass_context=True, aliases=["srs"])
     async def print_comms_plan(self, ctx):
