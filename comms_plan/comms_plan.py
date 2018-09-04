@@ -13,10 +13,11 @@ class CommsPlan:
         self.bot = bot
         self.session = aiohttp.ClientSession()
         #Make configurable.
-        self.comms_plan_url ="https://docs.google.com/spreadsheets/d/1a63VD2WXmShIwpiTTfHuK-5yWKw-3AtXLbv1LBjMyCE/export?exportFormat=csv" 
+        self.comms_plan_url ="https://docs.google.com/spreadsheets/d/1a63VD2WXmShIwpiTTfHuK-5yWKw-3AtXLbv1LBjMyCE" 
+        self.comms_plan_export = self.comms_plan_url + "/export?exportFormat=csv"
     
     async def fetch_comms_plan(self):
-        resp = await self.session.get(self.comms_plan_url)
+        resp = await self.session.get(self.comms_plan_export)
         if (resp.status != 200):
             await self.bot.say("Error getting comms plan. Check logs")
             raise Exception("Could not get status")
@@ -43,11 +44,12 @@ class CommsPlan:
         return comms_info
 
     async def respond_with_plan(self, plan):
-        message_template = "```Address: dcs.hoggitworld.com\n%s```"
+        message_template = "```Address: dcs.hoggitworld.com\n%s```%s"
         plan_message = ""
         for radio in plan:
-            plan_message += "%s: %s" % (radio['use'], radio['freq'])
-        await self.bot.say(message_template % plan_message)
+            plan_message += "%s: %s\n" % (radio['use'], radio['freq'])
+
+        await self.bot.say(message_template % (plan_message, "Details: %s" % self.comms_plan_url)
 
     @commands.group(pass_context=True, aliases=["srs"])
     async def print_comms_plan(self, ctx):
