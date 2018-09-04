@@ -15,7 +15,7 @@ class CommsPlan:
         #Make configurable.
         self.comms_plan_url ="https://docs.google.com/spreadsheets/d/1a63VD2WXmShIwpiTTfHuK-5yWKw-3AtXLbv1LBjMyCE" 
         self.comms_plan_export = self.comms_plan_url + "/export?exportFormat=csv"
-    
+
     async def fetch_comms_plan(self):
         resp = await self.session.get(self.comms_plan_export)
         if (resp.status != 200):
