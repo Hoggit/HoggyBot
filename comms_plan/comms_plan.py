@@ -38,7 +38,7 @@ class CommsPlan:
             if row[1] and self.is_number(row[1]):
                 radio = {}
                 radio['freq'] = row[1]
-                radio['use'] = row[2]
+                radio['use'] = row[3]
                 comms_info.append(radio)
 
         return comms_info
