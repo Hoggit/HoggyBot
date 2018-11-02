@@ -35,9 +35,9 @@ class CommsPlan:
         reader = csv.reader(data)
         comms_info = []
         for row in reader:
-            if row[0] and self.is_number(row[0]):
+            if row[1] and self.is_number(row[1]):
                 radio = {}
-                radio['freq'] = row[0]
+                radio['freq'] = row[1]
                 radio['use'] = row[2]
                 comms_info.append(radio)
 
