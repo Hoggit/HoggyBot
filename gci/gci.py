@@ -133,12 +133,12 @@ class GCI:
 
 def setup(bot):
     if not os.path.exists('data/gci'):
-        log("data/gci dir doesn't exist yet. Creating...")
+        print("data/gci dir doesn't exist yet. Creating...")
         os.makedirs("data/gci")
 
     f = "data/gci/data.json"
     if not fileIO(f, "check"):
-        log("Creating empty data.json")
+        print("Creating empty data.json")
         fileIO(f, "save", {})
 
     bot.add_cog(GCI(bot, f))
