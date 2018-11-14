@@ -12,10 +12,10 @@ class Standup:
 
     def get_standups(self):
         return dataIO.load_json(self.file_path)
-  
+
     def write_standups(self, standup):
         dataIO.save_json(self.file_path, standup)
-    
+
     @commands.command(pass_context=True)
     async def standup(self, ctx, *, text=None):
         output = ""
