@@ -32,7 +32,7 @@ class GCI:
         except:
             log("Unexpected error with the gci monitor: " + sys.exc_info()[0])
         finally:
-            await.asyncio.sleep(60)
+            await asyncio.sleep(60)
             asyncio.ensure_future(self.start_monitor())
 
 
