@@ -26,9 +26,13 @@ class GCI:
         active_role_id = self.data['active_role_id']
         if active_role_id:
             self.active_role = next(r for r in self.bot.server.roles if r.id == active_role_id)
+        else:
+            self.active_role = None
         allow_role_id = self.data['role_id']
         if allow_role_id:
             self.allow_role = next(r for r in self.bot.server.roles if r.id == allow_role_id)
+        else:
+            self.allow_role = None
 
     async def start_monitor(self):
         await self.bot.wait_until_ready()
@@ -47,10 +51,12 @@ class GCI:
 
 
     async def clear_active_role(user):
-        await self.bot.remove_roles(user, [self.active_role])
+        if self.active_role:
+            await self.bot.remove_roles(user, [self.active_role])
 
     async def add_active_role(user):
-        await self.bot.add_roles(user, [self.active_role])
+        if self.active_role:
+            await self.bot.add_roles(user, [self.active_role])
 
     async def sunset(self, user):
         await self.clear_active_role(user)
