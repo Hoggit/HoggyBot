@@ -1,0 +1,10 @@
+{
+    "AUTHOR": "Hoggit",
+    "INSTALL_MSG": "GCI is installed. Use !gci role <role> to set the role you want to require to use the commands.",
+    "NAME": "Hoggit Georgia At War GCI Signup.",
+    "SHORT": "Allows users in your server with a particular role to signup for GCI.",
+    "DESCRIPTION": "Users can sign up to be a GCI on the hoggit discord server.",
+    "TAGS": ["utility"],
+    "REQUIREMENTS": [],
+    "HIDDEN": false
+}
