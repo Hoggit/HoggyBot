@@ -49,7 +49,7 @@ class GCI:
 
     def sunrise(self, user, freq, remarks):
         gci = {}
-        gci['user'] = author
+        gci['user'] = user
         gci['start_time'] = time.time()
         gci['freq'] = freq
         gci['remarks'] = remarks
