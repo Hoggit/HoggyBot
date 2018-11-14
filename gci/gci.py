@@ -23,13 +23,11 @@ class GCI:
 
 
     def update_roles(self):
-        active_role_id = self.data['active_role_id']
-        if active_role_id:
+        if 'active_role_id' in self.data:
             self.active_role = next(r for r in self.bot.server.roles if r.id == active_role_id)
         else:
             self.active_role = None
-        allow_role_id = self.data['role_id']
-        if allow_role_id:
+        if 'role_id' in self.data:
             self.allow_role = next(r for r in self.bot.server.roles if r.id == allow_role_id)
         else:
             self.allow_role = None
