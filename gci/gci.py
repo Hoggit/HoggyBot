@@ -62,7 +62,7 @@ class GCI:
         fileIO(self.dataFile, 'save', data)
 
     @commands.group(name="gci", pass_context=True, no_pm=True, invoke_without_command=True)
-    def _gci(self, ctx):
+    async def _gci(self, ctx):
         """List active GCIs"""
         if len(self.active_gcis) == 0:
             await self.bot.say("No GCIs currently online.")
@@ -78,14 +78,14 @@ class GCI:
 
     @_gci.command(name="role")
     @checks.mod_or_permissions(manage_server=True)
-    def _role(self, role: discord.Role):
+    async def _role(self, role: discord.Role):
         self.data['role_id'] = role.id
         self.save_data(self.data)
         await self.bot.say("Set GCI role to: {}".format(role.name))
 
     @_gci.command(name="active_role")
     @checks.mod_or_permissions(manage_server=True)
-    def _active_role(self, role: discord.Role):
+    async def _active_role(self, role: discord.Role):
         self.data['active_role_id'] = role.id
         self.save_data(self.data)
         await self.bot.say("Set Active GCI role to: {}".format(role.name))
