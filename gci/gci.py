@@ -93,7 +93,7 @@ class GCI:
         await self.bot.say(response)
 
 
-    @_gci.command(name="help"):
+    @_gci.command(name="help")
     async def _help(self):
         await self.bot.send_cmd_help(ctx)
 
