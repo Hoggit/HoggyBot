@@ -106,7 +106,7 @@ class GCI:
         return
 
 
-    @_gci.command(name="sunset", pass_context=True):
+    @_gci.command(name="sunset", pass_context=True)
     async def _sunset(self, ctx):
         author = ctx.message.author
         found = False
