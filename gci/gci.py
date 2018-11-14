@@ -36,7 +36,15 @@ class GCI:
             asyncio.ensure_future(self.start_monitor())
 
 
+    def clear_role(user,role):
+        """Not yet.."""
+        role_id = self.data['active_role_id']
+        if not role_id:
+            return
+        self.bot.remove_roles(user, role)
+
     def sunset(self, user):
+        #self.clear_role(user)
         self.active_gcis[:] = [gci for gci in self.active_gcis if gci['user'].id != user.id]
 
     def sunrise(self, user, freq, remarks):
@@ -68,12 +76,19 @@ class GCI:
                             )
         await self.bot.say(response)
 
-    @_gci.command(name="role", no_pm=True)
+    @_gci.command(name="role")
     @checks.mod_or_permissions(manage_server=True)
     def _role(self, role: discord.Role):
         self.data['role_id'] = role.id
         self.save_data(self.data)
         await self.bot.say("Set GCI role to: {}".format(role.name))
+
+    @_gci.command(name="active_role")
+    @checks.mod_or_permissions(manage_server=True)
+    def _active_role(self, role: discord.Role):
+        self.data['active_role_id'] = role.id
+        self.save_data(self.data)
+        await self.bot.say("Set Active GCI role to: {}".format(role.name))
 
     @_gci.command(name="refresh", pass_context=True)
     async def _refresh(self, ctx):
