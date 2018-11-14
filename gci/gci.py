@@ -18,7 +18,17 @@ class GCI:
         self.dataFile = dataFile
         self.data = fileIO(dataFile, "load")
         self.active_gcis = []
+        self.update_roles()
+        asyncio.ensure_future(self.start_monitor())
 
+
+    def update_roles(self):
+        active_role_id = self.data['active_role_id']
+        if active_role_id:
+            self.active_role = next(r for r in self.bot.server.roles if r.id == active_role_id)
+        allow_role_id = self.data['role_id']
+        if allow_role_id:
+            self.allow_role = next(r for r in self.bot.server.roles if r.id == allow_role_id)
 
     async def start_monitor(self):
         await self.bot.wait_until_ready()
@@ -36,24 +46,24 @@ class GCI:
             asyncio.ensure_future(self.start_monitor())
 
 
-    def clear_role(user,role):
-        """Not yet.."""
-        role_id = self.data['active_role_id']
-        if not role_id:
-            return
-        self.bot.remove_roles(user, role)
+    async def clear_active_role(user):
+        await self.bot.remove_roles(user, [self.active_role])
 
-    def sunset(self, user):
-        #self.clear_role(user)
+    async def add_active_role(user):
+        await self.bot.add_roles(user, [self.active_role])
+
+    async def sunset(self, user):
+        await self.clear_active_role(user)
         self.active_gcis[:] = [gci for gci in self.active_gcis if gci['user'].id != user.id]
 
-    def sunrise(self, user, freq, remarks):
+    async def sunrise(self, user, freq, remarks):
         gci = {}
         gci['user'] = user
         gci['start_time'] = time.time()
         gci['freq'] = freq
         gci['remarks'] = remarks
         self.active_gcis.append(gci)
+        await self.add_active_role(user)
 
     def valid_user(self, user: discord.User):
         return self.data['role_id'] in [r.id for r in user.roles]
@@ -76,11 +86,17 @@ class GCI:
                             )
         await self.bot.say(response)
 
+
+    @_gci.command(name="help"):
+    async def _help(self):
+        await self.bot.send_cmd_help(ctx)
+
     @_gci.command(name="role")
     @checks.mod_or_permissions(manage_server=True)
     async def _role(self, role: discord.Role):
         self.data['role_id'] = role.id
         self.save_data(self.data)
+        self.update_roles()
         await self.bot.say("Set GCI role to: {}".format(role.name))
 
     @_gci.command(name="active_role")
@@ -88,6 +104,7 @@ class GCI:
     async def _active_role(self, role: discord.Role):
         self.data['active_role_id'] = role.id
         self.save_data(self.data)
+        self.update_roles()
         await self.bot.say("Set Active GCI role to: {}".format(role.name))
 
     @_gci.command(name="refresh", pass_context=True)
