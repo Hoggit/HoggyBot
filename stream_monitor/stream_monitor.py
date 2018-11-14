@@ -32,7 +32,7 @@ class StreamMonitor:
 
     def makeRequest(self, data):
         log("sending request")
-        url="https://api.twitch.tv/kraken/streams?community_id={}".format(data['community'])
+        url="https://api.twitch.tv/kraken/search/streams?query=DCS%20World"
         headers={'Accept': 'application/vnd.twitchtv.v5+json', 'Client-ID': data['clientId']}
         return self.session.get(url, headers=headers)
 
@@ -84,13 +84,6 @@ class StreamMonitor:
     async def _streammon(self, ctx):
         """Stream monitor config"""
         await self.bot.send_cmd_help(ctx)
-
-    @_streammon.command(name="community", no_pm=True)
-    async def _community(self, community_id):
-        """Adds a community to track on twitch.tv. Must be the community _id_"""
-        self.data['community'] = community_id
-        self.save_data(self.data)
-        await self.bot.say("Tracking community with id: {}".format(community_id))
 
     @_streammon.command(name="channel", no_pm=True)
     async def _channel(self, channel: discord.Channel):
