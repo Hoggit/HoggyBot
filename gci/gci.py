@@ -107,13 +107,10 @@ class GCI:
         await self.bot.say(response)
 
 
-    @_gci.command(name="help", pass_context=True)
-    async def _help(self, ctx):
-        await self.bot.send_cmd_help(ctx)
-
     @_gci.command(name="role")
     @checks.mod_or_permissions(manage_server=True)
     async def _role(self, role: discord.Role):
+        """Defines the role a user has to be in before being allowed to sunrise"""
         self.data['role_id'] = role.id
         self.save_data(self.data)
         self.update_roles()
@@ -122,6 +119,7 @@ class GCI:
     @_gci.command(name="active_role")
     @checks.mod_or_permissions(manage_server=True)
     async def _active_role(self, role: discord.Role):
+        """Defines the role that active GCIs get granted. Staff Only"""
         self.data['active_role_id'] = role.id
         self.save_data(self.data)
         self.update_roles()
@@ -129,6 +127,7 @@ class GCI:
 
     @_gci.command(name="refresh", pass_context=True)
     async def _refresh(self, ctx):
+        """Refreshes your timer back to 30 minutes"""
         found = False
         author = ctx.message.author
         for gci in self.active_gcis:
@@ -145,6 +144,7 @@ class GCI:
 
     @_gci.command(name="sunset", pass_context=True)
     async def _sunset(self, ctx):
+        """Removes you from the list of active GCIs."""
         author = ctx.message.author
         found = False
         for gci in self.active_gcis:
@@ -160,6 +160,11 @@ class GCI:
 
     @_gci.command(name="sunrise", no_pm=True, pass_context=True)
     async def _sunrise(self, ctx, freq: str, *, remarks: str):
+        """Adds you to the list of Active GCIs
+        The following must be provided:
+        freq - The frequency you can be contacted at on SRS.
+        remarks - Your callsign + anything related to your GCI slot (CAP flights only, for example)
+        """
         author = ctx.message.author
         if not self.valid_user(author):
             await self.bot.say("You're not allowed to be a GCI. Ask Staff about getting the role")
