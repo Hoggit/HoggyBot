@@ -99,10 +99,8 @@ class DCSServerStatus:
 
 
     async def poll(self):
-        print("Server Status: Poll...")
         try:
             status = await self.get_status()
-            print("Server Status Poll: {}".format(status))
             await self.set_presence(status)
         except:
             print("Server Status poll encountered an error. skipping this poll.")
@@ -129,7 +127,6 @@ class DCSServerStatus:
         elif health.status == "Offline":
             bot_status=discord.Status.dnd
             game="Server offline"
-        print("Server Status: Trying to set status to {}. Game to {}".format(bot_status, game))
         await self.bot.change_presence(status=bot_status, game=discord.Game(name=game))
 
     async def get_status(self):
@@ -148,11 +145,9 @@ class DCSServerStatus:
         return ServerHealth(last_update)
 
     def humanize_time(self, updateTime):
-        print("Got time: {}".format(updateTime))
         arrowtime = arrow.get(updateTime)
-        print("humanize time: {}".format(arrowtime.humanize()))
         return arrowtime.humanize()
-    
+
     def get_mission_time(self, status):
         time_seconds = datetime.timedelta(seconds=status["data"]["uptime"])
         return str(time_seconds).split(".")[0]
