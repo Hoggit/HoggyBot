@@ -23,14 +23,30 @@ class GCI:
 
 
     def update_roles(self):
-        if 'active_role_id' in self.data:
-            self.active_role = next(r for r in self.bot.server.roles if r.id == active_role_id)
-        else:
-            self.active_role = None
-        if 'role_id' in self.data:
-            self.allow_role = next(r for r in self.bot.server.roles if r.id == allow_role_id)
-        else:
-            self.allow_role = None
+        for server in self.bot.servers:
+            if 'active_role_id' in self.data:
+                active_role_id = self.data['active_role_id']
+                role = next(r for r in server.roles if r.id == active_role_id)
+                if role:
+                    self.active_role = role
+                else:
+                    self.active_role = None
+            else:
+                self.active_role = None
+
+            if 'role_id' in self.data:
+                allow_role_id = self.data['role_id']
+                role = next(r for r in server.roles if r.id == allow_role_id)
+                if role:
+                    self.allow_role = role
+                else:
+                    self.allow_role = None
+            else:
+                self.allow_role = None
+
+            if self.allow_role is not None or self.active_role is not None:
+                return
+
 
     async def start_monitor(self):
         await self.bot.wait_until_ready()
