@@ -107,8 +107,8 @@ class GCI:
         await self.bot.say(response)
 
 
-    @_gci.command(name="help")
-    async def _help(self):
+    @_gci.command(name="help", pass_context=True)
+    async def _help(self, ctx):
         await self.bot.send_cmd_help(ctx)
 
     @_gci.command(name="role")
