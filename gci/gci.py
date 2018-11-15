@@ -16,7 +16,9 @@ class GCI:
         self.bot = bot
         self.dataFile = dataFile
         self.data = fileIO(dataFile, "load")
-        self.active_gcis = []
+        self.active_gcis = [
+        self.allow_role = None
+        self.active_role = None
         self.update_roles()
         self.killSwitch = False
         self.active_time = 60 * 30 #30 minutes.
