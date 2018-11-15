@@ -95,6 +95,7 @@ class GCI:
 
     async def sunset(self, user):
         await self.clear_active_role(user)
+        self.reminded[:] = [user_id for user_id in self.reminded if user_id != user.id]
         self.active_gcis[:] = [gci for gci in self.active_gcis if gci['user'].id != user.id]
 
     async def sunrise(self, user, freq, remarks):
@@ -174,11 +175,9 @@ class GCI:
             if gci['user'].id == author.id:
                 found = True
                 await self.sunset(author)
-                break
-        if found:
-            await self.bot.say("Sunsetting.")
-        else:
-            await self.bot.say("You weren't signed up as a GCI.")
+                await self.bot.say("Sunsetting.")
+                return
+        await self.bot.say("You weren't signed up as a GCI.")
 
 
     @_gci.command(name="sunrise", no_pm=True, pass_context=True)
