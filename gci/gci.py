@@ -64,10 +64,10 @@ class GCI:
         await self.bot.wait_until_ready()
         try:
             for gci in self.active_gcis:
-                if gci['start_time'] + self.active_time > time.time():
+                if gci['start_time'] + self.active_time < time.time():
                     await self.bot.send_message(gci['user'], "30 minute duration achieved. Sunsetting.")
                     self.sunset(gci)
-                elif gci['start_time'] + self.warn_time > time.time():
+                elif gci['start_time'] + self.warn_time < time.time():
                     await self.bot.send_message(gci['user'], "You have been active as GCI for 25 minutes, in 5 minutes you will be automatically sunset. To continue for another 30 minutes, use !gci refresh")
         except:
             log("Unexpected error with the gci monitor: " + sys.exc_info()[0])
