@@ -177,7 +177,7 @@ class GCI:
         if not self.valid_user(author):
             await self.bot.say("You're not allowed to be a GCI. Ask Staff about getting the role")
             return
-        self.sunrise(author, freq, remarks)
+        await self.sunrise(author, freq, remarks)
         await self.bot.say("Added {} as GCI on {} with remarks [{}]".format(author.mention, freq, remarks))
 
 
