@@ -11,8 +11,6 @@ class GCI:
     """
     Tracks active GCIs on hoggit
     """
-    self.active_time = 60 * 30 #30 minutes.
-    self.warn_time = 60 * 25#25 minutes
 
     def __init__(self, bot, dataFile):
         self.bot = bot
@@ -21,6 +19,8 @@ class GCI:
         self.active_gcis = []
         self.update_roles()
         self.killSwitch = False
+        self.active_time = 60 * 30 #30 minutes.
+        self.warn_time = 60 * 25#25 minutes
         asyncio.ensure_future(self.start_monitor())
 
 
