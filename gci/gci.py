@@ -93,9 +93,12 @@ class GCI:
         else:
             log("Active role is not set. Skipping")
 
+    def remove_reminded_status(self, user):
+        self.reminded[:] = [user_id for user_id in self.reminded if user_id != user.id]
+
     async def sunset(self, user):
         await self.clear_active_role(user)
-        self.reminded[:] = [user_id for user_id in self.reminded if user_id != user.id]
+        self.remove_reminded_status(user)
         self.active_gcis[:] = [gci for gci in self.active_gcis if gci['user'].id != user.id]
 
     async def sunrise(self, user, freq, remarks):
@@ -152,28 +155,22 @@ class GCI:
     @_gci.command(name="refresh", pass_context=True)
     async def _refresh(self, ctx):
         """Refreshes your timer back to 30 minutes"""
-        found = False
         author = ctx.message.author
         for gci in self.active_gcis:
             if gci['user'].id == author.id:
-                found = True
+                self.remove_reminded_status(user)
                 gci['start_time'] = time.time()
-                break
-        if found:
-            await self.bot.send_message(author, "Refreshed your GCI timer for another 30 minutes")
-        else:
-            await self.bot.send_message(author, "Doesn't look like you were signed up as GCI yet. Use !gci sunrise <freq>")
-        return
+                await self.bot.send_message(author, "Refreshed your GCI timer for another 30 minutes")
+                return
+        await self.bot.send_message(author, "Doesn't look like you were signed up as GCI yet. Use !gci sunrise <freq>")
 
 
     @_gci.command(name="sunset", pass_context=True)
     async def _sunset(self, ctx):
         """Removes you from the list of active GCIs."""
         author = ctx.message.author
-        found = False
         for gci in self.active_gcis:
             if gci['user'].id == author.id:
-                found = True
                 await self.sunset(author)
                 await self.bot.say("Sunsetting.")
                 return
