@@ -20,7 +20,13 @@ class GCI:
         self.data = fileIO(dataFile, "load")
         self.active_gcis = []
         self.update_roles()
+        self.killSwitch = False
         asyncio.ensure_future(self.start_monitor())
+
+
+    def __unload(self):
+        log("Setting killswitch to True!")
+        self.killSwitch = True
 
 
     def update_roles(self):
@@ -50,6 +56,9 @@ class GCI:
 
 
     async def start_monitor(self):
+        if self.killSwitch:
+            log("Killswitch hit. Not re-polling")
+            return
         await self.bot.wait_until_ready()
         try:
             for gci in self.active_gcis:
