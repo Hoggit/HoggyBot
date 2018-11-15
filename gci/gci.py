@@ -23,6 +23,7 @@ class GCI:
         self.killSwitch = False
         self.active_time = 60 * 30 #30 minutes.
         self.warn_time = 60 * 25#25 minutes
+        self.reminded = []
         asyncio.ensure_future(self.start_monitor())
 
 
@@ -66,9 +67,11 @@ class GCI:
             for gci in self.active_gcis:
                 if gci['start_time'] + self.active_time < time.time():
                     await self.bot.send_message(gci['user'], "30 minute duration achieved. Sunsetting.")
-                    self.sunset(gci)
+                    await self.sunset(gci)
                 elif gci['start_time'] + self.warn_time < time.time():
-                    await self.bot.send_message(gci['user'], "You have been active as GCI for 25 minutes, in 5 minutes you will be automatically sunset. To continue for another 30 minutes, use !gci refresh")
+                    if gci['user'].id not in self.reminded:
+                        await self.bot.send_message(gci['user'], "You have been active as GCI for 25 minutes, in 5 minutes you will be automatically sunset. To continue for another 30 minutes, use !gci refresh")
+                        self.reminded.append(gci['user'].id)
         except:
             log("Unexpected error with the gci monitor: " + sys.exc_info()[0])
         finally:
