@@ -83,7 +83,7 @@ class GCI:
         self.active_gcis[:] = [gci for gci in self.active_gcis if gci['user'].id != user.id]
 
     async def sunrise(self, user, freq, remarks):
-        print("Adding {} as GCI".format(user.name))
+        log("Adding {} as GCI".format(user.name))
         gci = {}
         gci['user'] = user
         gci['start_time'] = time.time()
@@ -91,7 +91,7 @@ class GCI:
         gci['remarks'] = remarks
         self.active_gcis.append(gci)
         await self.add_active_role(user)
-        print("Added Active Role to {}".format(user.name))
+        log("Added Active Role to {}".format(user.name))
 
     def valid_user(self, user: discord.User):
         return self.data['role_id'] in [r.id for r in user.roles]
