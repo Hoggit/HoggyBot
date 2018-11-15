@@ -66,17 +66,24 @@ class GCI:
 
     async def clear_active_role(user):
         if self.active_role:
+            log("Active role is available. Unset {} role on {}".format(user.name, self.active_role))
             await self.bot.remove_roles(user, [self.active_role])
+        else:
+            log("Active role is not set. Skipping")
 
     async def add_active_role(user):
         if self.active_role:
+            log("Active role is available. Setting {} role on {}".format(user.name, self.active_role))
             await self.bot.add_roles(user, [self.active_role])
+        else:
+            log("Active role is not set. Skipping")
 
     async def sunset(self, user):
         await self.clear_active_role(user)
         self.active_gcis[:] = [gci for gci in self.active_gcis if gci['user'].id != user.id]
 
     async def sunrise(self, user, freq, remarks):
+        print("Adding {} as GCI".format(user.name))
         gci = {}
         gci['user'] = user
         gci['start_time'] = time.time()
@@ -84,6 +91,7 @@ class GCI:
         gci['remarks'] = remarks
         self.active_gcis.append(gci)
         await self.add_active_role(user)
+        print("Added Active Role to {}".format(user.name))
 
     def valid_user(self, user: discord.User):
         return self.data['role_id'] in [r.id for r in user.roles]
@@ -184,3 +192,6 @@ def setup(bot):
         fileIO(f, "save", {})
 
     bot.add_cog(GCI(bot, f))
+
+def log(s):
+    print("[GCI]: {}".format(s))
