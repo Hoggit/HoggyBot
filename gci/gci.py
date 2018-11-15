@@ -158,7 +158,7 @@ class GCI:
         author = ctx.message.author
         for gci in self.active_gcis:
             if gci['user'].id == author.id:
-                self.remove_reminded_status(user)
+                self.remove_reminded_status(author)
                 gci['start_time'] = time.time()
                 await self.bot.send_message(author, "Refreshed your GCI timer for another 30 minutes")
                 return
