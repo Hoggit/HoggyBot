@@ -64,14 +64,14 @@ class GCI:
             asyncio.ensure_future(self.start_monitor())
 
 
-    async def clear_active_role(user):
+    async def clear_active_role(self,user):
         if self.active_role:
             log("Active role is available. Unset {} role on {}".format(user.name, self.active_role))
             await self.bot.remove_roles(user, [self.active_role])
         else:
             log("Active role is not set. Skipping")
 
-    async def add_active_role(user):
+    async def add_active_role(self,user):
         if self.active_role:
             log("Active role is available. Setting {} role on {}".format(user.name, self.active_role))
             await self.bot.add_roles(user, [self.active_role])
