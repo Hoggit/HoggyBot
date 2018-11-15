@@ -66,11 +66,11 @@ class GCI:
         try:
             for gci in self.active_gcis:
                 if gci['start_time'] + self.active_time < time.time():
-                    await self.bot.send_message(gci['user'], "30 minute duration achieved. Sunsetting.")
-                    await self.sunset(gci['user'])
+                    await self.bot.send_message(gci['user'], "30 minute duration achieved. Signing off.")
+                    await self.midnight(gci['user'])
                 elif gci['start_time'] + self.warn_time < time.time():
                     if gci['user'].id not in self.reminded:
-                        await self.bot.send_message(gci['user'], "You have been active as GCI for 25 minutes, in 5 minutes you will be automatically sunset. To continue for another 30 minutes, use !gci refresh")
+                        await self.bot.send_message(gci['user'], "You have been active as GCI for 25 minutes, in 5 minutes you will be automatically signed-off. To continue for another 30 minutes, use !gci refresh")
                         self.reminded.append(gci['user'].id)
         except:
             log("Unexpected error with the gci monitor: " + sys.exc_info()[0])
@@ -96,7 +96,7 @@ class GCI:
     def remove_reminded_status(self, user):
         self.reminded[:] = [user_id for user_id in self.reminded if user_id != user.id]
 
-    async def sunset(self, user):
+    async def midnight(self, user):
         await self.clear_active_role(user)
         self.remove_reminded_status(user)
         self.active_gcis[:] = [gci for gci in self.active_gcis if gci['user'].id != user.id]
@@ -165,14 +165,14 @@ class GCI:
         await self.bot.send_message(author, "Doesn't look like you were signed up as GCI yet. Use !gci sunrise <freq>")
 
 
-    @_gci.command(name="sunset", pass_context=True)
-    async def _sunset(self, ctx):
+    @_gci.command(name="midnight", pass_context=True)
+    async def _midnight(self, ctx):
         """Removes you from the list of active GCIs."""
         author = ctx.message.author
         for gci in self.active_gcis:
             if gci['user'].id == author.id:
-                await self.sunset(author)
-                await self.bot.say("Sunsetting.")
+                await self.midnight(author)
+                await self.bot.say("{}, Signing off.".format(author.name))
                 return
         await self.bot.say("You weren't signed up as a GCI.")
 
