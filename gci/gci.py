@@ -168,7 +168,7 @@ class GCI:
         for gci in self.active_gcis:
             if gci['user'].id == author.id:
                 found = True
-                self.sunset(author)
+                await self.sunset(author)
                 break
         if found:
             await self.bot.say("Sunsetting.")
