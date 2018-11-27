@@ -90,7 +90,7 @@ class HoggitWeeklyQuestions:
                 self.data["reddit"]["last_utc_check"] = last_comment_utc
                 self.save_data(self.data)
                 await self.say_comments(comments)
-            log("Poll completed. Found {} comments".format(len(comments)))
+            #log("Poll completed. Found {} comments".format(len(comments)))
         except RedditNotConfigured:
             log("Reddit not configured. Skipping poll")
         finally:
