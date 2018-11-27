@@ -86,6 +86,7 @@ class StreamMonitor:
         await self.bot.send_cmd_help(ctx)
 
     @_streammon.command(name="channel", no_pm=True)
+    @checks.is_owner()
     async def _channel(self, channel: discord.Channel):
         self.data['channel'] = channel.id
         await self.bot.say("Set stream alerting channel to {}".format(channel.name))
@@ -94,6 +95,7 @@ class StreamMonitor:
         self.save_data(self.data)
 
     @_streammon.command(name="clientid", no_pm=True)
+    @checks.is_owner()
     async def _setClientId(self, clientId):
         self.data['clientId'] = clientId
         self.save_data(self.data)
