@@ -90,7 +90,7 @@ class HoggitWeeklyQuestions:
                 self.data["reddit"]["last_utc_check"] = last_comment_utc
                 self.save_data(self.data)
                 await self.say_comments(comments)
-            #log("Poll completed. Found {} comments".format(len(comments)))
+            log("Poll completed. Found {} comments".format(len(comments)))
         except RedditNotConfigured:
             log("Reddit not configured. Skipping poll")
         finally:
@@ -105,7 +105,7 @@ class HoggitWeeklyQuestions:
         """
         Lists the current weekly questions thread
         """
-        post = weekly_thread()
+        post = self.weekly_thread()
         if post:
             await self.bot.say("This week's question thread: http://reddit.com{}".format(post.permalink))
             return
