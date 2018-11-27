@@ -1,0 +1,10 @@
+{
+    "AUTHOR": "Hoggit",
+    "INSTALL_MSG": "Hoggit Weekly Questions interface installed.",
+    "NAME": "Hoggit Weekly Questions Relay",
+    "SHORT": "Relays weekly questions from the current thread to a channel on discord.",
+    "DESCRIPTION": "Checks the sticky posts on the /r/hoggit subreddit for a thread matching a weekly questions format. If one is found, we post new top-level comments into a configured channel.",
+    "TAGS": ["utility"],
+    "REQUIREMENTS": ["praw"],
+    "HIDDEN": false
+}
