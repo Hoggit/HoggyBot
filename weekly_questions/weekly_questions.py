@@ -73,7 +73,7 @@ class HoggitWeeklyQuestions:
         for comment in comments:
             if comment.author.name not in self.data["ignored_usernames"]:
                 embed = discord.Embed()
-                question = comment.body[:75] + "..." if len(comment.body) > 75 else comment.body
+                question = comment.body[:250] + "..." if len(comment.body) > 250 else comment.body
                 embed.add_field(name="User", value=comment.author.name, inline=False)
                 embed.add_field(name="Question", value=question, inline=False)
                 embed.add_field(name="Link", value="https://reddit.com{}".format(comment.permalink), inline=False)
