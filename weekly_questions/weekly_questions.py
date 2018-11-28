@@ -75,7 +75,7 @@ class HoggitWeeklyQuestions:
                 embed = discord.Embed()
                 question = comment.body[:75] + "..." if len(comment.body) > 75 else comment.body
                 embed.add_field(name="User", value=comment.author.name, inline=False)
-                embed.add_field(name="Question", value=comment.body, inline=False)
+                embed.add_field(name="Question", value=question, inline=False)
                 embed.add_field(name="Link", value="https://reddit.com{}".format(comment.permalink), inline=False)
                 await self.bot.send_message(chan, embed=embed)
 
