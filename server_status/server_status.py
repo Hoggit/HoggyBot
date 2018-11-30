@@ -154,7 +154,10 @@ class DCSServerStatus:
 
     def get_metar(self, status):
         metar = status["data"]["metar"]
-        return metar if metar else return "Unavailable"
+        if metar:
+            return metar
+        else:
+            return "Unavailable"
 
     def embedMessage(self, status):
         health = self.determine_health(status)
