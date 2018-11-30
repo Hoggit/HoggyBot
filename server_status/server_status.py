@@ -152,6 +152,10 @@ class DCSServerStatus:
         time_seconds = datetime.timedelta(seconds=status["data"]["uptime"])
         return str(time_seconds).split(".")[0]
 
+    def get_metar(self, status):
+        metar = status["data"]["metar"]
+        return metar if metar else return "Unavailable"
+
     def embedMessage(self, status):
         health = self.determine_health(status)
         embed=discord.Embed(color=health.color)
@@ -161,6 +165,7 @@ class DCSServerStatus:
         embed.add_field(name="Mission", value=status["missionName"], inline=True)
         embed.add_field(name="Map", value=status["map"], inline=True)
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=True)
+        embed.add_field(name="METAR", value=get_metar(status))
         if health.status == "Online":
             embed.add_field(name="Mission Time", value=self.get_mission_time(status), inline=True)
         else:
