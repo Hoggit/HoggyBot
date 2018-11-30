@@ -168,7 +168,7 @@ class DCSServerStatus:
         embed.add_field(name="Mission", value=status["missionName"], inline=True)
         embed.add_field(name="Map", value=status["map"], inline=True)
         embed.add_field(name="Players", value="{}/{}".format(status["players"], status["maxPlayers"]), inline=True)
-        embed.add_field(name="METAR", value=get_metar(status))
+        embed.add_field(name="METAR", value=self.get_metar(status))
         if health.status == "Online":
             embed.add_field(name="Mission Time", value=self.get_mission_time(status), inline=True)
         else:
