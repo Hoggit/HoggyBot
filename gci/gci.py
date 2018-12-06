@@ -113,7 +113,7 @@ class GCI:
         log("Added Active Role to {}".format(user.name))
 
     def valid_user(self, user: discord.User):
-        return self.data['role_id'] in [r.id for r in user.roles]
+        return True
 
     def save_data(self, data):
         fileIO(self.dataFile, 'save', data)
