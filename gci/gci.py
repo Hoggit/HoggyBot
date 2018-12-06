@@ -17,7 +17,6 @@ class GCI:
         self.dataFile = dataFile
         self.data = fileIO(dataFile, "load")
         self.active_gcis = []
-        self.allow_role = None
         self.active_role = None
         self.update_roles()
         self.killSwitch = False
@@ -44,17 +43,7 @@ class GCI:
             else:
                 self.active_role = None
 
-            if 'role_id' in self.data:
-                allow_role_id = self.data['role_id']
-                role = next(r for r in server.roles if r.id == allow_role_id)
-                if role:
-                    self.allow_role = role
-                else:
-                    self.allow_role = None
-            else:
-                self.allow_role = None
-
-            if self.allow_role is not None or self.active_role is not None:
+            if self.active_role is not None:
                 return
 
 
@@ -133,15 +122,6 @@ class GCI:
                             )
         await self.bot.say(response)
 
-
-    @_gci.command(name="role")
-    @checks.mod_or_permissions(manage_server=True)
-    async def _role(self, role: discord.Role):
-        """Defines the role a user has to be in before being allowed to sunrise"""
-        self.data['role_id'] = role.id
-        self.save_data(self.data)
-        self.update_roles()
-        await self.bot.say("Set GCI role to: {}".format(role.name))
 
     @_gci.command(name="active_role")
     @checks.mod_or_permissions(manage_server=True)
