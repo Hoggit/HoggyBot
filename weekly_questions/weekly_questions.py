@@ -48,7 +48,7 @@ class HoggitWeeklyQuestions:
         subreddit = self.reddit().subreddit('hoggit')
         posts = (post for post in subreddit.hot(limit=2) if post.stickied)
         for post in posts:
-            if re.search("^Tuesday Noob Questions", post.title):
+            if re.search("^Weekly Noob Questions", post.title):
                 return post
         return None
 
