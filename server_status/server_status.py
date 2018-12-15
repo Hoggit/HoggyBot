@@ -84,7 +84,7 @@ class DCSServerStatus:
         self.session = aiohttp.ClientSession()
         self.key_file = "data/server_status/server.json"
         self.key_data = dataIO.load_json(self.key_file)
-        self.base_url = "http://status.hoggitworld.com/"
+        self.base_url = "https://status.hoggitworld.com/"
         self.killPoll = False
         self.start_polling()
 
