@@ -24,14 +24,14 @@ class ServerHealth():
     Red - Offline
     """
 
-    def __init__(self, updateTime):
+    def __init__(self, updateTime, server_key):
         self.uptime_file = "data/server_status/server.json"
         self.uptime_data = dataIO.load_json(self.uptime_file)
-        self.status = self.determine_status(updateTime, self.uptime_data)
+        self.status = self.determine_status(updateTime, self.uptime_data[server_key], server_key)
         self.color = self.determine_color(self.status)
-        self.uptime = self.determine_uptime(self.status, self.uptime_data)
+        self.uptime = self.determine_uptime(self.status, self.uptime_data[server_key])
 
-    def determine_status(self, updateTime, uptime_data):
+    def determine_status(self, updateTime, uptime_data, server_key):
         now = arrow.utcnow()
         status = "Online"
         if "status" not in uptime_data:
@@ -41,7 +41,7 @@ class ServerHealth():
         if (updateTime < now.shift(seconds=-100)):
             status = "Offline"
         if status != uptime_data["status"]:
-            self.store_uptime(status, updateTime)
+            self.store_uptime(status, updateTime, server_key)
         return status
 
     def determine_color(self, status):
@@ -53,6 +53,8 @@ class ServerHealth():
 
     def determine_uptime(self, status, uptime_data):
         now = arrow.utcnow()
+        if "status" not in self.get_uptime():
+            return self.determine_delta(now, uptime_data["time"])
         if self.get_uptime()['status'] == status:
             current_uptime = self.determine_delta(now, uptime_data["time"])
             return current_uptime
@@ -60,9 +62,9 @@ class ServerHealth():
     def get_uptime(self):
         return dataIO.load_json(self.uptime_file)
 
-    def store_uptime(self, status, time):
-        self.uptime_data["status"] = status
-        self.uptime_data["time"] = time.for_json()
+    def store_uptime(self, status, time, server_key):
+        self.uptime_data[server_key]["status"] = status
+        self.uptime_data[server_key]["time"] = time.for_json()
         dataIO.save_json(self.uptime_file, self.uptime_data)
 
     def determine_delta(self, current, change):
@@ -86,8 +88,8 @@ class DCSServerStatus:
         self.key_data = dataIO.load_json(self.key_file)
         self.base_url = "https://status.hoggitworld.com/"
         self.killPoll = False
+        self.last_key_checked = None
         self.start_polling()
-
 
     def __unload(self):
         #kill the polling
@@ -97,29 +99,64 @@ class DCSServerStatus:
         asyncio.ensure_future(self.poll())
         print("Server Status polling started")
 
+    def get_next_key(self):
+        key = None
+        if not self.last_key_checked:
+            if len(self.key_data) > 0:
+                key = list(self.key_data.keys())[0]
+            else:
+                return None
+        else:
+            key = self.last_key_checked
+            found = False
+            for k in self.key_data.keys():
+                if found:
+                    key = k
+                    break
+                if k == key:
+                    found = True
+            if key == self.last_key_checked:
+                key = list(self.key_data.keys())[0]
+        self.last_key_checked = key
+        return key
+
 
     async def poll(self):
         try:
-            status = await self.get_status()
-            await self.set_presence(status)
-        except:
-            print("Server Status poll encountered an error. skipping this poll.")
+            key = self.get_next_key()
+            if key == None:
+                print ("No keys to poll on. skipping")
+            else:
+                data = self.key_data[key]
+                status = await self.get_status(data["key"])
+                await self.set_presence(status, key)
+        except Exception as e:
+            print("Server Status poll encountered an error. skipping this poll: ", e)
         finally:
             if self.killPoll:
                 print("Server Status poll killswitch received. Not scheduling another poll")
                 return
-            await asyncio.sleep(20)
+            await asyncio.sleep(5)
             asyncio.ensure_future(self.poll())
 
 
     def store_key(self, key):
-        self.key_data = key
-        dataIO.save_json(self.key_file, self.key_data)
+        self.key_data[key["alias"].lower()] = key
+        self.save_key_data(self.key_data)
 
-    async def set_presence(self, status):
+    def delete_key(self, alias):
+        if alias.lower() in self.key_data:
+            del self.key_data[alias.lower()]
+            self.save_key_data(self.key_data)
+
+    def save_key_data(self, key_data):
+        dataIO.save_json(self.key_file, key_data)
+
+    async def set_presence(self, status, server_key):
         await self.bot.wait_until_ready()
-        game="{} players on {}".format(status["players"], status["missionName"])
-        health=self.determine_health(status)
+        server_data = self.key_data[server_key]
+        game="{} players on {} playing on {}".format(status["players"], server_data["alias"], status["missionName"])
+        health=self.determine_health(status, server_key)
         bot_status=discord.Status.online
         if health.status == "Unhealthy":
             bot_status=discord.Status.idle
@@ -129,8 +166,8 @@ class DCSServerStatus:
             game="Server offline"
         await self.bot.change_presence(status=bot_status, game=discord.Game(name=game))
 
-    async def get_status(self):
-        url = self.base_url + self.key_data["key"]
+    async def get_status(self, key):
+        url = self.base_url + key
         resp = await self.session.get(url)
         if (resp.status != 200):
             raise ErrorGettingStatus(resp.status)
@@ -140,9 +177,9 @@ class DCSServerStatus:
         status["maxPlayers"] = status["maxPlayers"] - 1
         return status
 
-    def determine_health(self, status):
+    def determine_health(self, status, server_key):
         last_update = arrow.get(status["data"]["updateTime"])
-        return ServerHealth(last_update)
+        return ServerHealth(last_update, server_key)
 
     def humanize_time(self, updateTime):
         arrowtime = arrow.get(updateTime)
@@ -153,14 +190,14 @@ class DCSServerStatus:
         return str(time_seconds).split(".")[0]
 
     def get_metar(self, status):
-        metar = status["data"]["metar"]
-        if metar:
-            return metar
-        else:
-            return "Unavailable"
+        if "metar" in status["data"]:
+            metar = status["data"]["metar"]
+            if metar:
+                return metar
+        return "Unavailable"
 
-    def embedMessage(self, status):
-        health = self.determine_health(status)
+    def embedMessage(self, status, alias):
+        health = self.determine_health(status, alias)
         embed=discord.Embed(color=health.color)
         embed.set_author(name=status["serverName"], icon_url="https://i.imgur.com/KEd7OQJ.png")
         embed.set_thumbnail(url="https://i.imgur.com/KEd7OQJ.png")
@@ -176,31 +213,58 @@ class DCSServerStatus:
         embed.set_footer(text="Last update: {} -- See my status light for up-to-date status.".format(self.humanize_time(status["updateTime"])))
         return embed
 
+    @commands.group(pass_context=True, aliases=["serverlist"])
+    async def _servers(self, ctx):
+        servers = self.key_data.items()
+        message = "Tracking the following servers:\n"
+        for key, server in servers:
+            message += ":desktop: -- {}\n".format(server["alias"])
+        message += "\n\nUse `!server <servername>` to get the status of that server"
+        await self.bot.say(message)
 
     @commands.group(pass_context=True, aliases=["server"])
-    async def server_status(self, ctx):
+    async def server_status(self, ctx, alias):
+        """Gets the server status for the provided alias."""
         if ctx.invoked_subcommand is None:
-            if (self.key_data == {} or self.key_data["key"] == ''):
+            alias = alias.lower()
+            if alias not in self.key_data:
+                await self.bot.send_message(ctx.message.author, "We aren't tracking a server called {}".format(alias))
+            if (self.key_data == {}):
                 await self.bot.say("Configure the key first bud")
+                return
             else:
                 if not ctx.message.channel.is_private:
                     await self.bot.send_message(ctx.message.author, "Please only use `!server` in PMs with me.")
                 try:
-                    status = await self.get_status()
-                    message = self.embedMessage(status)
+                    if alias not in self.key_data:
+                        await self.bot.send_message(ctx.message.author, "No server by that alias.")
+                        return
+                    status = await self.get_status(self.key_data[alias]["key"])
+                    message = self.embedMessage(status, alias)
                     await self.bot.send_message(ctx.message.author, embed=message)
-                    await self.set_presence(status)
                 except ErrorGettingStatus as e:
                     await self.bot.send_message(ctx.message.author, "Status unknown right now.")
                     print("Error getting status. Response code was " + str(e.status))
 
-    @server_status.command()
+    @commands.group(pass_context=True, aliases=["serverconf"])
+    async def _serverconf(self, ctx):
+        if ctx.invoked_subcommand is None:
+            return
+
+    @_serverconf.command()
     @checks.mod_or_permissions(manage_server=True)
-    async def key(self, *, text = ""):
+    async def delete(self, alias):
+        self.delete_key(alias)
+        await self.bot.say("Removed key for {}".format(alias))
+
+    @_serverconf.command()
+    @checks.mod_or_permissions(manage_server=True)
+    async def key(self, alias, *, text = ""):
         key = {}
         key["key"] = text
+        key["alias"] = alias
         self.store_key(key)
-        await self.bot.say("Updated Key to {}".format(key["key"]))
+        await self.bot.say("Updated Key for {} to {}".format(key["alias"], key["key"]))
 
 def check_folders():
     if not os.path.exists("data/server_status"):
