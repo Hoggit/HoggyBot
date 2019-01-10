@@ -224,7 +224,7 @@ class DCSServerStatus:
 
     @commands.group(pass_context=True, aliases=["server"])
     async def server_status(self, ctx, alias):
-        """Gets the server status for the provided alias."""
+        """Gets the server status for the provided alias. Use !serverlist to see all the servers we're tracking"""
         if ctx.invoked_subcommand is None:
             alias = alias.lower()
             if alias not in self.key_data:
