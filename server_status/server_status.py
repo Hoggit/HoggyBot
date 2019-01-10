@@ -163,7 +163,7 @@ class DCSServerStatus:
             game="Slow updates - " + game
         elif health.status == "Offline":
             bot_status=discord.Status.dnd
-            game="Server offline"
+            game="{} Server offline".format(server_data["alias"])
         await self.bot.change_presence(status=bot_status, game=discord.Game(name=game))
 
     async def get_status(self, key):
