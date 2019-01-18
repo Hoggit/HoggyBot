@@ -48,10 +48,12 @@ class HoggitWiki:
         results_length = len(results)
         trimmed_results = results[:5]
         for result in trimmed_results:
+            url = self.base_url + "/view/" + urlencode(result["title"])
+            print("Wiki: Setting url for field: " + url)
             embed.add_field(
                     name=result["title"],
                     value="{} - {}".format(result["user"], arrow.get(result["timestamp"]).humanize()),
-                    url=self.base_url + "/view/" + urlencode(results["title"]))
+                    url=url)
 
         if results_length > 5:
             embed.set_footer(text="And {} more changes omitted".format(results.length - 5))
