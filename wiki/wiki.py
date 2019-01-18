@@ -10,6 +10,7 @@ from .utils.chat_formatting import pagify
 from .utils import checks
 from .utils.dataIO import fileIO, dataIO
 from discord.ext import commands
+from urllib.parse import urlencode
 
 
 class HoggitWiki:
@@ -47,7 +48,10 @@ class HoggitWiki:
         results_length = len(results)
         trimmed_results = results[:5]
         for result in trimmed_results:
-            embed.add_field(name=result["title"], value="{} - {}".format(result["user"],arrow.get(result["timestamp"]).humanize()))
+            embed.add_field(
+                    name=result["title"],
+                    value="{} - {}".format(result["user"], arrow.get(result["timestamp"]).humanize()),
+                    url=self.base_url + "/view/" + urlencode(results["title"]))
 
         if results_length > 5:
             embed.set_footer(text="And {} more changes omitted".format(results.length - 5))
