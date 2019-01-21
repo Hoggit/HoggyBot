@@ -53,7 +53,6 @@ class Commendations:
         author = ctx.message.author
         try:
             commendation = self.commendation(author, user, text)
-            print("commendation: {}".format(commendation))
             self.store(ctx, commendation)
             await self.bot.say("Commended {}.".format(user.name))
         except SameUserError:
@@ -90,7 +89,6 @@ class Commendations:
             await self.bot.say("No commendations on this server yet")
             return
         commended_users = self.topCommendees(self.c_commendations[server_id], 10)
-        print("Commended users: {}".format(commended_users))
         commended_user_ranks = []
         leaders=[]
         rank=1
@@ -107,9 +105,7 @@ class Commendations:
     def topCommendees(self, commendation_dict, amount):
         dic_to_list = lambda dic: [(k, len(v)) for (k, v) in dic.items()]
         commendation_counts = dic_to_list(commendation_dict)
-        print("commendation counts: {}".format(commendation_counts))
         commendation_counts = sorted(commendation_counts, key=lambda x: x[1], reverse=True)
-        print("sorted counts: {}".format(commendation_counts))
         return commendation_counts[:amount]
 
 def check_folders():

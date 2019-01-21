@@ -65,7 +65,6 @@ class HoggitWeeklyQuestions:
             log("Could not post {} comments to a channel, as no channel is configured".format(len(comments)))
             return
         channel_id = self.data["channel"]
-        log("looking up channel with id: {}".format(channel_id))
         chan = self.bot.get_channel(channel_id)
         if not chan:
             log("Can't find channel with id: {}".format(channel_id))
@@ -91,7 +90,6 @@ class HoggitWeeklyQuestions:
                 self.data["reddit"]["last_utc_check"] = last_comment_utc
                 self.save_data(self.data)
                 await self.say_comments(comments)
-            log("Poll completed. Found {} comments".format(len(comments)))
         except RedditNotConfigured:
             log("Reddit not configured. Skipping poll")
         finally:

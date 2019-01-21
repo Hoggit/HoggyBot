@@ -31,7 +31,6 @@ class StreamMonitor:
 
 
     def makeRequest(self, data):
-        log("sending request")
         url="https://api.twitch.tv/kraken/search/streams?query=DCS%20World"
         headers={'Accept': 'application/vnd.twitchtv.v5+json', 'Client-ID': data['clientId']}
         return self.session.get(url, headers=headers)
@@ -43,16 +42,13 @@ class StreamMonitor:
             return
         try:
             if 'channel' not in self.data:
-                log("No channel configured for alerts. Skipping poll")
                 await asyncio.sleep(60)
                 asyncio.ensure_future(self._poll())
                 return
             channel_id = self.data['channel']
-            log("Channel ID: {}".format(channel_id))
             message_id = self.data['message']
             response = await self.makeRequest(self.data)
             responseTxt = await response.text()
-            log("Got response. formatting and editing message")
             channel = self.bot.get_channel(channel_id)
             message = await self.bot.get_message(channel, message_id)
             await self.bot.edit_message(message, self.format_results(responseTxt))

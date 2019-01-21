@@ -126,7 +126,7 @@ class DCSServerStatus:
         try:
             key = self.get_next_key()
             if key == None:
-                print ("No keys to poll on. skipping")
+                return #still runs finally
             else:
                 data = self.key_data[key]
                 status = await self.get_status(data["key"])

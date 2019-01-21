@@ -37,10 +37,13 @@ class GCI:
                 active_role_id = self.data['active_role_id']
                 role = next(r for r in server.roles if r.id == active_role_id)
                 if role:
+                    log("Active role was set.")
                     self.active_role = role
                 else:
+                    log("Active role wasn't valid. Not setting.")
                     self.active_role = None
             else:
+                log("Active role not in data. don't load it")
                 self.active_role = None
 
             if self.active_role is not None:
