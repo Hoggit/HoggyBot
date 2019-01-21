@@ -90,7 +90,7 @@ class DCSServerStatus:
         self.killPoll = False
         self.last_key_checked = None
         self.start_polling()
-        self.presence_cycle_time_seconds = 3
+        self.presence_cycle_time_seconds = 5
 
     def __unload(self):
         #kill the polling
