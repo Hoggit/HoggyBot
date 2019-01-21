@@ -133,7 +133,7 @@ class GCI:
         """Defines the role that active GCIs get granted. Staff Only"""
         self.data['active_role_id'] = role.id
         self.save_data(self.data)
-        await.self.update_roles()
+        await self.update_roles()
         await self.bot.say("Set Active GCI role to: {}".format(role.name))
 
     @_gci.command(name="refresh", pass_context=True)
