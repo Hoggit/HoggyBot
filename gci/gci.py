@@ -22,6 +22,7 @@ class GCI:
         self.active_time = 60 * 30 #30 minutes.
         self.warn_time = 60 * 25#25 minutes
         self.reminded = []
+        asyncio.ensure_future(self.update_roles())
         asyncio.ensure_future(self.start_monitor())
 
 
@@ -30,7 +31,8 @@ class GCI:
         self.killSwitch = True
 
 
-    def update_roles(self):
+    async def update_roles(self):
+        await self.bot.wait_until_ready()
         for server in self.bot.servers:
             if 'active_role_id' in self.data:
                 active_role_id = self.data['active_role_id']
@@ -54,7 +56,6 @@ class GCI:
             log("Killswitch hit. Not re-polling")
             return
         await self.bot.wait_until_ready()
-        self.update_roles()
         try:
             for gci in self.active_gcis:
                 if gci['start_time'] + self.active_time < time.time():
@@ -132,7 +133,7 @@ class GCI:
         """Defines the role that active GCIs get granted. Staff Only"""
         self.data['active_role_id'] = role.id
         self.save_data(self.data)
-        self.update_roles()
+        await.self.update_roles()
         await self.bot.say("Set Active GCI role to: {}".format(role.name))
 
     @_gci.command(name="refresh", pass_context=True)
