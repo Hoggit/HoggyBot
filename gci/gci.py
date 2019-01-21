@@ -18,11 +18,12 @@ class GCI:
         self.data = fileIO(dataFile, "load")
         self.active_gcis = []
         self.active_role = None
-        self.update_roles()
         self.killSwitch = False
         self.active_time = 60 * 30 #30 minutes.
         self.warn_time = 60 * 25#25 minutes
         self.reminded = []
+        await self.bot.wait_until_ready()
+        self.update_roles()
         asyncio.ensure_future(self.start_monitor())
 
 
