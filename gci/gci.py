@@ -22,8 +22,6 @@ class GCI:
         self.active_time = 60 * 30 #30 minutes.
         self.warn_time = 60 * 25#25 minutes
         self.reminded = []
-        await self.bot.wait_until_ready()
-        self.update_roles()
         asyncio.ensure_future(self.start_monitor())
 
 
@@ -56,6 +54,7 @@ class GCI:
             log("Killswitch hit. Not re-polling")
             return
         await self.bot.wait_until_ready()
+        self.update_roles()
         try:
             for gci in self.active_gcis:
                 if gci['start_time'] + self.active_time < time.time():
