@@ -90,6 +90,7 @@ class DCSServerStatus:
         self.killPoll = False
         self.last_key_checked = None
         self.start_polling()
+        self.presence_cycle_time_seconds = 2
 
     def __unload(self):
         #kill the polling
@@ -136,7 +137,7 @@ class DCSServerStatus:
             if self.killPoll:
                 print("Server Status poll killswitch received. Not scheduling another poll")
                 return
-            await asyncio.sleep(5)
+            await asyncio.sleep(self.presence_cycle_time_seconds)
             asyncio.ensure_future(self.poll())
 
 
