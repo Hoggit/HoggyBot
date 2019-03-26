@@ -77,8 +77,8 @@ class HoggitWiki:
                 self.last_wiki_check = arrow.utcnow()
                 channel = self.bot.get_channel(chan_id)
                 await self.bot.send_message(channel, embed=formatted_results)
-        except:
-            print("Wiki: Unexpected error sending wiki recent changes: " + sys.exc_info()[0])
+        except Exception as e:
+            print("Wiki: Unexpected error sending wiki recent changes: " + e)
         finally:
             if self.alerts["channel"] == chan_id and not self.killSwitch:
                 asyncio.ensure_future(self._alert(chan_id))
