@@ -186,7 +186,7 @@ class HoggitWiki:
         """
         print("Wiki: New alert requested for channel {}".format(chan.name))
         self.alerts["channel"] = chan.id
-        self.start_alerts()
+        await self.start_alerts()
         dataIO.save_json('data/wiki/alerts.json', self.alerts)
         await self.bot.say("Started an alert for {}".format(chan.name))
 
